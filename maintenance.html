@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHEGGIE AI Trader - Maintenance Mode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .status h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .status ul {
+            list-style: none;
+            color: #555;
+        }
+        
+        .status li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .status li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #856404;
+            text-align: left;
+        }
+        
+        .warning strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔧</div>
+        <h1>We're Updating Your Application</h1>
+        <p>CHEGGIE AI Trader is currently in maintenance mode. We're making improvements to serve you better.</p>
+        
+        <div class="status">
+            <h2>Current Status</h2>
+            <ul>
+                <li>System is paused for updates</li>
+                <li>All data is safely preserved</li>
+                <li>No trading activity during maintenance</li>
+                <li>Services will resume shortly</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Free Tier Protection Active</strong>
+            The application has been automatically paused to prevent exceeding Railway free tier limits. 
+            This is part of our cost-protection system to ensure sustainable operation.
+        </div>
+        
+        <p><strong>What's happening?</strong></p>
+        <p>Our system automatically monitors resource usage and activates maintenance mode when approaching free tier limits. This ensures we never exceed allocated resources.</p>
+        
+        <p><strong>Next Steps:</strong></p>
+        <p>The application can be migrated to Coolify for continued operation. Check the repository for migration instructions in <code>COOLIFY_MIGRATION.md</code>.</p>
+        
+        <a href="https://github.com/executiveusa/CHEGGIE-AI-Trader" class="button">View Repository</a>
+        
+        <div class="footer">
+            <p>CHEGGIE AI Trader - Autonomous Trading Arena</p>
+            <p>Powered by Railway Zero-Secrets Architecture</p>
+            <p>Status: Maintenance Mode Active</p>
+        </div>
+    </div>
+</body>
+</html>
