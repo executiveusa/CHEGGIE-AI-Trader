@@ -4,10 +4,23 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Deploy on Railway](https://img.shields.io/badge/Deploy-Railway-purple.svg)](https://railway.app/new/template?template=https://github.com/executiveusa/CHEGGIE-AI-Trader)
 [![Feishu](https://img.shields.io/badge/💬Feishu-Group-blue?style=flat)](./Communication.md) 
 [![WeChat](https://img.shields.io/badge/WeChat-Group-green?style=flat&logo=wechat)](./Communication.md)
 
 **Five AIs battle for NASDAQ 100 supremacy. Zero human input. Pure competition.**
+
+## 🎉 NEW: Zero-Secrets Railway Deployment!
+
+Deploy this application to Railway **without any API keys or configuration**! The app runs in demo mode using local data, with optional API keys for full functionality.
+
+**🚀 [One-Click Deploy to Railway](https://railway.app/new/template?template=https://github.com/executiveusa/CHEGGIE-AI-Trader)** | **📖 [Deployment Guide](RAILWAY_DEPLOYMENT.md)** | **🔒 [Zero-Secrets Architecture](ZERO_SECRETS_README.md)**
+
+**Features:**
+- ✅ Deploy in seconds without configuration
+- ✅ Automatic cost protection and free-tier monitoring
+- ✅ Gradual enhancement (add API keys later)
+- ✅ Built-in Coolify migration support
 
 ## 🏆 Current Championship Leaderboard 🏆 
 [*click me to check*](https://hkuds.github.io/AI-Trader/)
@@ -33,7 +46,7 @@
 </div>
 
 
-[🚀 Quick Start](#-quick-start) • [📈 Performance Analysis](#-performance-analysis) • [🛠️ Configuration Guide](#-configuration-guide) • [中文文档](README_CN.md)
+[🚀 Railway Deployment](#-railway-deployment) • [🚀 Quick Start](#-quick-start) • [📈 Performance Analysis](#-performance-analysis) • [🛠️ Configuration Guide](#-configuration-guide) • [中文文档](README_CN.md)
 
 </div>
 
@@ -192,6 +205,82 @@ AI-Trader Bench/
 - **📝 Trading Records**: Detailed trading history for each AI model
 - **📊 Performance Metrics**: Sharpe ratio, maximum drawdown, annualized returns, etc.
 - **🔄 Data Synchronization**: Automated data acquisition and update mechanisms
+
+---
+
+## 🚀 Railway Deployment
+
+Deploy CHEGGIE AI Trader to Railway with zero configuration required!
+
+### 🎯 Zero-Secrets Architecture
+
+This application is designed for **immediate deployment without any API keys**. It runs in demo mode using local historical data, with optional API keys for full functionality.
+
+### 🚂 Deploy Options
+
+#### Option 1: One-Click Deploy (Fastest)
+Click the button to deploy instantly:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/executiveusa/CHEGGIE-AI-Trader)
+
+#### Option 2: Automated Script
+```bash
+# Clone repository
+git clone https://github.com/executiveusa/CHEGGIE-AI-Trader.git
+cd CHEGGIE-AI-Trader
+
+# Run deployment script
+./deploy_railway.sh
+```
+
+#### Option 3: Railway CLI
+```bash
+# Install Railway CLI
+npm install -g @railway/cli
+
+# Login and deploy
+railway login
+railway init
+railway up
+```
+
+### ✅ What Works Out of the Box
+
+**Demo Mode (No Configuration Needed):**
+- ✅ Application starts successfully
+- ✅ Uses pre-loaded NASDAQ 100 historical data
+- ✅ Mock AI trading decisions
+- ✅ All MCP services operational
+- ✅ Trading simulation with local data
+
+**Full Mode (Add API Keys Later):**
+- Add `OPENAI_API_KEY` for real AI inference
+- Add `ALPHAADVANTAGE_API_KEY` for live market data
+- Add `JINA_API_KEY` for active web search
+
+### 🛡️ Built-in Cost Protection
+
+- **Automatic resource monitoring**
+- **Free-tier ceiling detection**
+- **Auto-shutdown on limit breach**
+- **Maintenance mode activation**
+- **Coolify migration support**
+
+### 📚 Comprehensive Documentation
+
+- **[Complete Deployment Guide](RAILWAY_DEPLOYMENT.md)** - Step-by-step Railway deployment
+- **[Zero-Secrets Architecture](ZERO_SECRETS_README.md)** - Understanding the architecture
+- **[Coolify Migration Guide](COOLIFY_MIGRATION.md)** - Migrate to self-hosted Coolify
+- **[API Reference](.agents)** - All environment variables and secrets
+
+### 💡 Quick Tips
+
+1. **Start with demo mode** - No configuration needed
+2. **Monitor resources** - Check Railway dashboard regularly
+3. **Add secrets gradually** - Enable features as needed
+4. **Plan for scale** - Coolify migration ready when needed
+
+---
 
 ## 🚀 Quick Start
 
