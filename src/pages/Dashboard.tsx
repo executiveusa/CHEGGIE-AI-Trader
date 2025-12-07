@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useMemo } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '@/context/AdminAuthContext';
+import { FinancialDashboard } from '@/components/FinancialDashboard';
 import {
   ArrowDownRight,
   ArrowRight,
@@ -134,6 +136,7 @@ const Dashboard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user: adminUser, loading: authLoading } = useAdminAuth();
+  const [dashboardMode, setDashboardMode] = useState<'trading' | 'business'>('trading');
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -170,9 +173,44 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-muted/20">
       <Navigation />
-      {isLoading && <DashboardSkeleton />}
-      {!isLoading && data && (
-        <div className="container mx-auto px-4 pt-32 pb-16 space-y-10">
+      
+      {/* Dashboard Mode Switcher */}
+      <div className="fixed top-24 right-4 z-40 flex gap-2">
+        <button
+          onClick={() => setDashboardMode('trading')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+            dashboardMode === 'trading'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Trading Dashboard
+        </button>
+        <button
+          onClick={() => setDashboardMode('business')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+            dashboardMode === 'business'
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Business Dashboard
+        </button>
+      </div>
+
+      {/* Trading Dashboard */}
+      {dashboardMode === 'trading' && (
+        <div className="container mx-auto px-4 pt-32 pb-16">
+          <FinancialDashboard />
+        </div>
+      )}
+
+      {/* Business Dashboard */}
+      {dashboardMode === 'business' && (
+        <>
+          {isLoading && <DashboardSkeleton />}
+          {!isLoading && data && (
+            <div className="container mx-auto px-4 pt-32 pb-16 space-y-10">
           <header className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-3">
               <Badge variant="outline" className="w-fit border-primary text-primary">
@@ -651,7 +689,9 @@ const Dashboard = () => {
               Built for Cheggie AI on Lovable Cloud · Secure AI, Bitcoin, and FX automation ready for Serbia.
             </p>
           </footer>
-        </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
