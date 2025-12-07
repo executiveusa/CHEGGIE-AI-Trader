@@ -34,7 +34,7 @@ This repository has been enhanced with a **Railway Zero-Secrets Bootstrapper** s
 
 ### Configuration Files
 - **`.agents`** - Structured secret specifications for all integrations
-- **`master.secrets.json`** - Local secret storage template (NOT committed to Git)
+- **`master.secrets.json.template`** - Local secret storage template (copy to master.secrets.json)
 - **`railway.toml`** - Railway deployment configuration with resource limits
 - **`.gitignore`** - Updated to exclude secrets and sensitive files
 
@@ -179,19 +179,24 @@ JINA_API_KEY=jina_your-jina-key
 
 ### Local Development
 
-Secrets stored in `master.secrets.json` (NOT committed):
+**First time setup**: Copy the template to create your secrets file:
+```bash
+cp master.secrets.json.template master.secrets.json
+```
+
+Then edit `master.secrets.json` with your actual secrets (NOT committed to Git):
 ```json
 {
   "projects": {
     "CHEGGIE-AI-Trader": {
       "secrets": {
         "ai_models": {
-          "OPENAI_API_KEY": "PLACEHOLDER_sk-...",
+          "OPENAI_API_KEY": "sk-your-actual-key-here",
           "OPENAI_API_BASE": "https://api.openai.com/v1"
         },
         "data_sources": {
-          "ALPHAADVANTAGE_API_KEY": "PLACEHOLDER_...",
-          "JINA_API_KEY": "PLACEHOLDER_jina_..."
+          "ALPHAADVANTAGE_API_KEY": "your-actual-key",
+          "JINA_API_KEY": "jina_your-actual-key"
         }
       }
     }

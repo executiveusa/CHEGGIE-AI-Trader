@@ -85,6 +85,7 @@ def main():
     checks.append(check_file_exists('.agents', 'Secret specifications'))
     checks.append(check_file_exists('railway.toml', 'Railway configuration'))
     checks.append(check_file_exists('maintenance.html', 'Maintenance page'))
+    checks.append(check_file_exists('master.secrets.json.template', 'Secrets template'))
     checks.append(check_file_exists('RAILWAY_DEPLOYMENT.md', 'Deployment guide'))
     checks.append(check_file_exists('COOLIFY_MIGRATION.md', 'Migration guide'))
     checks.append(check_file_exists('deploy_railway.sh', 'Deployment script'))
@@ -94,7 +95,7 @@ def main():
     # Validate JSON files
     print("📄 Validating JSON Configuration...")
     checks.append(validate_json_file('.agents', '.agents file'))
-    checks.append(validate_json_file('master.secrets.json', 'master.secrets.json'))
+    checks.append(validate_json_file('master.secrets.json.template', 'master.secrets.json.template'))
     checks.append(validate_json_file('configs/default_config.json', 'default_config.json'))
     print()
     
