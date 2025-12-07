@@ -1,0 +1,36 @@
+title: Cheggie AI UI Styleguide
+version: 2025-01-26
+source_tokens: ./design_tokens.json
+sections:
+  - area: Layout
+    guidance:
+      - "Remove legacy #root constraints so Tailwind containers can span the viewport. Rely on container padding tokens (spacing.containerPadding) for horizontal rhythm."
+      - "Marketing sections should align to container max width 1400px with a 12-column mental model; cards and stats may use grid utilities but must preserve 24px (spacing.6) vertical rhythm."
+  - area: Color & Theming
+    guidance:
+      - "Use color.primary.base for CTA fills and color.primary.glow for matching shadows; never hard-code hex or rgba values."
+      - "Radial background flourishes should reference color.gradients.radial-soft to stay consistent across screens."
+      - "Ensure dark mode variants pull from the `.dark` token set; avoid manual opacity tweaks beyond 10% increments."
+  - area: Typography
+    guidance:
+      - "Set base font family to typography.fontFamilies.sans; reserve typography.fontFamilies.mono for code/data tables."
+      - "Headlines follow typography.fontSizes.4xl/5xl/6xl with lineHeights.tight; body copy uses typography.fontSizes.base with lineHeights.normal."
+      - "Buttons and badges use uppercase sparingly; default letter spacing is typography.letterSpacing.normal unless acting as a label (then use tight)."
+  - area: Motion & Interaction
+    guidance:
+      - "Framer Motion components must respect prefers-reduced-motion: gate animations behind a reducedMotion check and fall back to opacity fades (motion.reducedMotion.strategy)."
+      - "Limit hover transitions to motion.duration.base with easing.standard; bounce easing is reserved for onboarding highlights."
+  - area: Localization & Content
+    guidance:
+      - "All user-facing strings must be sourced from the i18n dictionary; add keys for form labels, placeholders, and helper text before implementation."
+      - "Reserve English copy in code for analytics or developer-only logs."
+  - area: Assets
+    guidance:
+      - "Serve hero/dashboard imagery via optimized local assets with srcset descriptors (1x/2x) and include width/height to avoid layout shift."
+      - "Inline SVG icons should inherit currentColor to honor theme switches."
+qa_checklist:
+  - "Viewport widths above 1440px show full-bleed backgrounds without unintended centering."
+  - "Reduced motion preference disables looping hero or background animations."
+  - "Switching locales (EN/SR/ES) updates Auth labels, placeholders, and helper messages."
+  - "Gradients match defined tokens; no rgba literals remain in components."
+  - "Hero and dashboard images load optimized sources and include descriptive alt text."

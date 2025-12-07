@@ -1,0 +1,40 @@
+# Cheggie AI Design Audit
+
+## Overview
+Cheggie AI ships a marketing site and dashboard shell using Tailwind CSS tokens and shadcn/ui components. The design language leans on gradient-heavy hero treatments, animated motion, and multilingual content sourced from the i18n configuration. Colors, radii, and shadows are centrally declared in `src/index.css`, giving a strong foundation for theme control across light and dark modes.【F:src/index.css†L9-L109】 Hero, workflow, pricing, and testimonial sections consistently apply large headline styles (`text-4xl` to `text-7xl`) with supporting body copy, reinforcing a high-impact financial brand tone.【F:src/components/Hero.tsx†L49-L112】【F:src/components/WorkflowSection.tsx†L24-L48】【F:src/components/Pricing.tsx†L22-L81】【F:src/components/TestimonialsSection.tsx†L23-L57】
+
+However, legacy Vite starter CSS clamps the root app width to 1280px and centers it, fighting the responsive container strategy used elsewhere.【F:src/App.css†L1-L6】 Several motion elements animate indefinitely without respecting reduced-motion preferences, and radial gradients rely on hard-coded RGBA values outside the token set, increasing inconsistency risk.【F:src/components/Hero.tsx†L18-L33】【F:src/components/Hero.tsx†L12-L15】 The authentication page backgrounds also position absolute layers without a relative parent, causing bleed-through beyond the viewport.【F:src/pages/Auth.tsx†L31-L44】 Multilingual support is incomplete because form labels, placeholders, and helper text remain hard-coded in English, bypassing the translation dictionary.【F:src/pages/Auth.tsx†L68-L170】【F:src/i18n/config.ts†L1-L436】 Dashboard imagery pulls directly from Unsplash without responsive sizing or local optimization, which can impact performance on slower networks.【F:src/components/DashboardShowcase.tsx†L63-L84】
+
+## Dimension Scores (0–1)
+| Dimension | Score | Notes |
+| --- | --- | --- |
+| Typography | 0.7 | Clear heading hierarchy via Tailwind scales, but no defined type scale tokens beyond component-level classes.【F:src/components/Hero.tsx†L49-L112】【F:src/components/WorkflowSection.tsx†L24-L48】 |
+| Color & Theming | 0.6 | Comprehensive light/dark tokens exist, yet bespoke radial gradients in Hero use literal RGBA values outside the token system.【F:src/index.css†L9-L109】【F:src/components/Hero.tsx†L12-L33】 |
+| Layout & Spacing | 0.4 | Global `#root` max-width overrides fluid layouts and centers all content, constraining responsiveness.【F:src/App.css†L1-L6】 |
+| Component Consistency | 0.7 | Cards, badges, and buttons reuse shadcn/ui primitives with consistent gradient emphasis across sections.【F:src/components/Pricing.tsx†L42-L81】【F:src/components/TestimonialsSection.tsx†L31-L60】 |
+| Responsiveness | 0.5 | Section grids adapt with Tailwind breakpoints, but the fixed root container width blocks full-width layouts on large screens.【F:src/components/DashboardShowcase.tsx†L19-L87】【F:src/App.css†L1-L6】 |
+| Accessibility | 0.4 | Animations run continuously without reduced-motion checks, and Auth form text remains untranslated, limiting locale accessibility.【F:src/components/Hero.tsx†L18-L33】【F:src/pages/Auth.tsx†L68-L170】 |
+| Interaction & Motion | 0.3 | Framer Motion elements animate endlessly with no motion preference fallback, risking vestibular discomfort.【F:src/components/Hero.tsx†L18-L107】 |
+| Semantic Structure | 0.7 | Sections use semantic `<section>` containers and heading hierarchy, improving navigation for assistive tech.【F:src/components/FAQSection.tsx†L13-L45】【F:src/components/Hero.tsx†L49-L115】 |
+| Asset Performance | 0.3 | Hero/dashboard imagery loads from remote URLs without `srcSet` or local optimization, hurting performance budgets.【F:src/components/DashboardShowcase.tsx†L63-L84】 |
+| Brand Cohesion | 0.6 | Gradients and iconography reinforce finance branding, but inconsistent gradient definitions threaten cohesion.【F:src/components/Navigation.tsx†L21-L47】【F:src/components/Hero.tsx†L12-L33】 |
+| Localization Readiness | 0.4 | i18n resources cover EN/SR/ES, yet key Auth strings and helper text are hard-coded in English, blocking full localization.【F:src/i18n/config.ts†L1-L436】【F:src/pages/Auth.tsx†L68-L178】 |
+| Code-to-Design Mapping | 0.5 | Tailwind tokens cover most colors and radii, but hard-coded gradients in components bypass reusable tokens.【F:src/index.css†L9-L109】【F:src/components/Hero.tsx†L12-L33】 |
+| Historical Drift | 0.5 | No prior token snapshot exists; current tokens are cohesive but lack version control to detect drift (assumption flagged). |
+| Layout Integrity Metrics | 0.4 | Root width clamp and absolute Auth backgrounds undermine fluid spacing and containment.【F:src/App.css†L1-L6】【F:src/pages/Auth.tsx†L31-L44】 |
+| Error & Empty States | 0.3 | Dashboard includes skeletons, yet there are no styled error or empty states for failed queries or empty data sets.【F:src/pages/Dashboard.tsx†L104-L152】 |
+
+## Key Findings
+1. **Legacy root container styling breaks responsive layout.** Removing the `#root` max-width and center alignment is required to let Tailwind containers span the viewport.【F:src/App.css†L1-L6】
+2. **Motion and gradient treatments bypass accessibility and token governance.** Infinite Framer Motion loops and raw RGBA gradients need reduced-motion fallbacks and tokenized definitions.【F:src/components/Hero.tsx†L12-L107】
+3. **Localization gaps in Auth flow.** Labels, placeholders, and helper text should consume translation keys instead of hard-coded English copy.【F:src/pages/Auth.tsx†L68-L178】【F:src/i18n/config.ts†L1-L436】
+4. **Media assets lack performance safeguards.** Remote imagery in the dashboard lacks responsive sizing or CDN optimization strategy.【F:src/components/DashboardShowcase.tsx†L63-L84】
+
+## Design Correction Map
+- {"criterion": "Layout & Spacing", "finding": "#root still enforces a 1280px centered layout, overriding Tailwind's responsive containers.", "recommended_fix": "Delete the legacy `#root` rules in `src/App.css` or scope them to demo-only routes, allowing sections to occupy full width.", "support_score": 0.8, "evidence_sources": ["F:src/App.css†L1-L6"]}
+- {"criterion": "Accessibility & Motion", "finding": "Hero animations loop infinitely without `prefers-reduced-motion` handling, risking discomfort.", "recommended_fix": "Wrap Framer Motion animations with `useReducedMotion` checks and provide static fallbacks when users prefer reduced motion.", "support_score": 0.7, "evidence_sources": ["F:src/components/Hero.tsx†L18-L107"]}
+- {"criterion": "Localization", "finding": "Auth form labels and helper text are hard-coded in English instead of using `t()` keys.", "recommended_fix": "Add translation keys for all Auth labels, placeholders, and helper copy in `src/i18n/config.ts`, then replace literals with `t()` calls.", "support_score": 0.8, "evidence_sources": ["F:src/pages/Auth.tsx†L68-L178", "F:src/i18n/config.ts†L1-L436"]}
+- {"criterion": "Code-to-Design Mapping", "finding": "Hero background radial gradient uses literal RGBA values outside the defined token set.", "recommended_fix": "Define a `--gradient-radial` token in `index.css` (or new design tokens) and reference it via Tailwind utilities instead of inline arbitrary values.", "support_score": 0.6, "evidence_sources": ["F:src/components/Hero.tsx†L12-L33", "F:src/index.css†L9-L109"]}
+- {"criterion": "Asset Performance", "finding": "Dashboard showcase image pulls a single remote 1200px asset without responsive sources or local optimization.", "recommended_fix": "Host the asset locally or via optimized CDN and provide `srcSet`/`sizes` to adapt downloads per viewport.", "support_score": 0.6, "evidence_sources": ["F:src/components/DashboardShowcase.tsx†L63-L84"]}
+- {"criterion": "Layout Integrity", "finding": "Auth page background effects are absolutely positioned without a relative parent, letting visuals spill beyond the intended viewport.", "recommended_fix": "Add `relative` to the Auth root container or wrap decorative layers in a bounded positioned element.", "support_score": 0.5, "evidence_sources": ["F:src/pages/Auth.tsx†L31-L45"]}
+
