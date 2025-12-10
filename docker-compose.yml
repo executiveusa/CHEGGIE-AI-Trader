@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  flowise:
+    image: flowiseai/flowise:latest
+    # or build locally with the upstream Dockerfile
+    # build: ./vendor/flowise
+    container_name: flowise
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+      - VITE_PORT=5174
+    volumes:
+      - ./data/flowise:/root/.flowise
+    restart: unless-stopped
+
+  strapi:
+    image: strapi/strapi:latest
+    container_name: strapi
+    depends_on:
+      - flowise
+    env_file:
+      - .env
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=/srv/app/data/data.db
+      - STRAPI_TELEMETRY_DISABLED=true
+      - STRAPI_ADMIN_FORBID_REGISTER=true
+      - STRAPI_HOST=0.0.0.0
+      - STRAPI_PORT=1337
+    volumes:
+      - ./data/strapi:/srv/app/data
+    restart: unless-stopped

@@ -1,0 +1,29 @@
+version: 1
+loops:
+  - id: nightly-design-audit
+    schedule: "0 3 * * *"
+    tasks:
+      - collect_dom_snapshots
+      - run_lighthouse
+      - run_axe
+      - run_udec_validator
+      - propose_fixes_via_flowwise
+      - open_pr_lovable_cloud
+    approvals:
+      required: true
+      route: /admin/reviews
+    budgets:
+      lighthouse:
+        lcp: 2500
+        cls: 0.1
+        tti: 3200
+  - id: weekly-bundle-trim
+    schedule: "0 4 * * 1"
+    tasks:
+      - analyze_bundles
+      - suggest_dynamic_imports
+      - verify_lcp_cls
+      - open_pr_lovable_cloud
+    approvals:
+      required: true
+      route: /admin/reviews

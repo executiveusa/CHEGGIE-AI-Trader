@@ -1,0 +1,34 @@
+# Application
+NODE_ENV=production
+PORT=8080
+
+# API & Lovable Cloud
+VITE_API_URL=https://api.lovable.cloud
+VITE_LOVABLE_KEY=
+VITE_LOVABLE_PROJECT_ID=
+
+# Image APIs
+VITE_UNSPLASH_ACCESS_KEY=
+VITE_PEXELS_API_KEY=
+
+# AI Agents & Integration
+VITE_FLOWWISE_URL=http://localhost:3000
+VITE_FLOWWISE_KEY=
+VITE_GEMINI_API_KEY=
+VITE_OPENAI_API_KEY=
+
+# Supabase (Legacy - Optional)
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+
+# PostgreSQL / Railway Database
+VITE_DATABASE_URL=postgresql://user:password@host:port/database
+DATABASE_URL=postgresql://user:password@host:port/database
+
+# Admin Access Control
+ADMIN_ALLOWED_EMAILS=alice@cheggie.com,bob@cheggie.com
+
+# Railway Deployment
+RAILWAY_ENVIRONMENT_NAME=production
+RAILWAY_PROJECT_ID=97358809-0fee-4ae9-994e-d3dbf2d36901
+
