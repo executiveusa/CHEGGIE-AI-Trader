@@ -1,0 +1,171 @@
+{
+  "project": "CHEGGIE-AI-Trader",
+  "description": "AI Trading Competition Arena - Multiple AI models autonomously trading NASDAQ 100 stocks",
+  "version": "1.0.0",
+  "core": [
+    {
+      "name": "RUNTIME_ENV_PATH",
+      "description": "Path to runtime environment configuration JSON file",
+      "format": "file_path",
+      "example": "./runtime_env.json",
+      "default": "./.runtime_env.json",
+      "required": true,
+      "category": "system"
+    }
+  ],
+  "optional": [
+    {
+      "name": "OPENAI_API_BASE",
+      "description": "OpenAI API base URL (can use proxy or alternative endpoint)",
+      "format": "url",
+      "example": "https://api.openai.com/v1",
+      "default": "https://api.openai.com/v1",
+      "required": false,
+      "category": "ai_models",
+      "fallback_behavior": "Use default OpenAI endpoint"
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "description": "OpenAI API key for GPT models",
+      "format": "api_key",
+      "example": "sk-...",
+      "default": "DISABLED_IN_ZERO_SECRETS_MODE",
+      "required": false,
+      "category": "ai_models",
+      "fallback_behavior": "Stub AI responses with mock data"
+    },
+    {
+      "name": "ALPHAADVANTAGE_API_KEY",
+      "description": "Alpha Vantage API key for fetching stock market data",
+      "format": "api_key",
+      "example": "ABCDEFGHIJK123",
+      "default": "DISABLED_IN_ZERO_SECRETS_MODE",
+      "required": false,
+      "category": "data_sources",
+      "fallback_behavior": "Use cached/static historical data from data/ directory"
+    },
+    {
+      "name": "JINA_API_KEY",
+      "description": "Jina AI API key for web search and scraping",
+      "format": "api_key",
+      "example": "jina_...",
+      "default": "DISABLED_IN_ZERO_SECRETS_MODE",
+      "required": false,
+      "category": "data_sources",
+      "fallback_behavior": "Disable search tool, return mock news data"
+    },
+    {
+      "name": "INIT_DATE",
+      "description": "Initial trading date for backtest period (YYYY-MM-DD)",
+      "format": "date",
+      "example": "2025-01-01",
+      "default": "2025-10-01",
+      "required": false,
+      "category": "configuration"
+    },
+    {
+      "name": "END_DATE",
+      "description": "End trading date for backtest period (YYYY-MM-DD)",
+      "format": "date",
+      "example": "2025-01-31",
+      "default": "2025-10-21",
+      "required": false,
+      "category": "configuration"
+    },
+    {
+      "name": "MATH_HTTP_PORT",
+      "description": "HTTP port for Math MCP service",
+      "format": "port",
+      "example": "8000",
+      "default": "8000",
+      "required": false,
+      "category": "services"
+    },
+    {
+      "name": "SEARCH_HTTP_PORT",
+      "description": "HTTP port for Search MCP service",
+      "format": "port",
+      "example": "8001",
+      "default": "8001",
+      "required": false,
+      "category": "services"
+    },
+    {
+      "name": "TRADE_HTTP_PORT",
+      "description": "HTTP port for Trade MCP service",
+      "format": "port",
+      "example": "8002",
+      "default": "8002",
+      "required": false,
+      "category": "services"
+    },
+    {
+      "name": "GETPRICE_HTTP_PORT",
+      "description": "HTTP port for GetPrice MCP service",
+      "format": "port",
+      "example": "8003",
+      "default": "8003",
+      "required": false,
+      "category": "services"
+    },
+    {
+      "name": "AGENT_MAX_STEP",
+      "description": "Maximum number of reasoning steps for AI agents",
+      "format": "integer",
+      "example": "30",
+      "default": "30",
+      "required": false,
+      "category": "configuration"
+    }
+  ],
+  "required_secrets": [],
+  "schema": {
+    "version": "1.0",
+    "deployment_mode": "zero_secrets_railway",
+    "secret_categories": {
+      "system": {
+        "description": "Core system configuration",
+        "secrets": ["RUNTIME_ENV_PATH"]
+      },
+      "ai_models": {
+        "description": "AI model API keys (optional, will be stubbed if not provided)",
+        "secrets": ["OPENAI_API_KEY", "OPENAI_API_BASE"],
+        "stub_enabled": true
+      },
+      "data_sources": {
+        "description": "External data source API keys (optional, will use local data if not provided)",
+        "secrets": ["ALPHAADVANTAGE_API_KEY", "JINA_API_KEY"],
+        "stub_enabled": true
+      },
+      "services": {
+        "description": "Service port configurations",
+        "secrets": ["MATH_HTTP_PORT", "SEARCH_HTTP_PORT", "TRADE_HTTP_PORT", "GETPRICE_HTTP_PORT"]
+      },
+      "configuration": {
+        "description": "Runtime configuration parameters",
+        "secrets": ["INIT_DATE", "END_DATE", "AGENT_MAX_STEP"]
+      }
+    },
+    "deployment_instructions": {
+      "railway": {
+        "step_1": "No secrets required for initial deployment",
+        "step_2": "Application will use local cached data from data/ directory",
+        "step_3": "AI models will use stubbed responses in demo mode",
+        "step_4": "Set environment variables in Railway dashboard for full functionality",
+        "step_5": "See master.secrets.json for complete secret specifications"
+      }
+    },
+    "stub_behavior": {
+      "ai_models_disabled": "Returns mock trading decisions using simple logic",
+      "data_sources_disabled": "Uses pre-loaded historical data from data/ directory",
+      "search_disabled": "Returns mock market news and information"
+    }
+  },
+  "notes": [
+    "This application is designed for zero-secrets Railway deployment",
+    "All external integrations are optional and will be safely stubbed if not configured",
+    "The application can run in demo mode using only local data",
+    "For full functionality, configure API keys after initial deployment",
+    "See RAILWAY_DEPLOYMENT.md for detailed deployment instructions"
+  ]
+}
