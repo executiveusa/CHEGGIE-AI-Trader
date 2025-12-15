@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finance - Personal Dashboard</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "accent-teal": "#2dd4bf",
+                        "surface-dark": "#111822",
+                        "surface-card": "#1a2433",
+                        "surface-hover": "#233042",
+                        "text-primary": "#ffffff",
+                        "text-secondary": "#94a3b8",
+                        "border-subtle": "#2e3c50",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "2xl": "1.5rem"
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111822; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2e3c50; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3e4f66; 
+        }
+        
+        /* Smooth fade-in animation for loaded content */
+        .fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-surface-dark text-slate-900 dark:text-text-primary font-display antialiased min-h-screen flex flex-col selection:bg-primary selection:text-white">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-border-subtle bg-gray-50/80 dark:bg-surface-dark/80 backdrop-blur-md">
+<div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+<!-- Left: Logo & Nav -->
+<div class="flex items-center gap-12">
+<a class="flex items-center gap-3 group" href="#">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<span class="text-xl font-bold tracking-tight">Finance</span>
+</a>
+<nav class="hidden md:flex items-center gap-1">
+<a class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-text-secondary hover:text-primary dark:hover:text-primary rounded-full hover:bg-gray-200/50 dark:hover:bg-white/5 transition-colors" href="#">Overview</a>
+<a class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-text-secondary hover:text-primary dark:hover:text-primary rounded-full hover:bg-gray-200/50 dark:hover:bg-white/5 transition-colors" href="#">Accounts</a>
+<a class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-text-secondary hover:text-primary dark:hover:text-primary rounded-full hover:bg-gray-200/50 dark:hover:bg-white/5 transition-colors" href="#">Planning</a>
+<a class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-text-secondary hover:text-primary dark:hover:text-primary rounded-full hover:bg-gray-200/50 dark:hover:bg-white/5 transition-colors" href="#">Markets</a>
+</nav>
+</div>
+<!-- Right: Utilities -->
+<div class="flex items-center gap-4">
+<!-- Language Toggle -->
+<div class="hidden sm:flex items-center p-1 rounded-full border border-gray-200 dark:border-border-subtle bg-white dark:bg-surface-card">
+<button class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 dark:bg-surface-hover text-slate-900 dark:text-white shadow-sm">EN</button>
+<button class="px-3 py-1 rounded-full text-xs font-medium text-slate-500 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white transition-colors">ES-MX</button>
+<button class="px-3 py-1 rounded-full text-xs font-medium text-slate-500 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white transition-colors">SR-Latn</button>
+</div>
+<!-- Theme Toggle & Profile -->
+<div class="flex items-center gap-3 pl-2 sm:pl-0">
+<button aria-label="Toggle theme" class="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 dark:text-text-secondary hover:bg-gray-200 dark:hover:bg-surface-hover transition-colors">
+<span class="material-symbols-outlined text-[20px]">light_mode</span>
+</button>
+<div class="h-6 w-px bg-gray-200 dark:bg-border-subtle mx-1"></div>
+<button class="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-border-subtle transition-transform hover:scale-105 focus:ring-2 ring-primary ring-offset-2 ring-offset-surface-dark">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB44NGi3ijco8v85_UiryawHVP5yZwjb1S_-uiG8fY_Lp7UbgQ_4L8PQBBS58gjg2dlZEexj1ewhjH0XCr6RH_XN_PoMMMnT6ByAC_tpd3kKI-w_KNI_m1j2-3N0BtyknkJoqvkR1W5Sl29iovk7_qVsfhwTpzIS-pHWlI5SdTd3JB4cFdu2MEnyfm9k-U5dP0JpSO0rWOQ4yJA72AdS1eIo1qD09roOtYiQSmlWQoJWjbJGzMcFPeX4NdBscjUoXla7waJJ6-Xuy4"/>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-[1200px] mx-auto px-6 py-12 flex flex-col gap-12">
+<!-- Hero Section -->
+<section class="fade-in-up grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<span class="text-primary font-medium tracking-wide text-sm uppercase">Daily Snapshot</span>
+<h1 class="text-4xl md:text-6xl font-light tracking-tight text-slate-900 dark:text-white leading-[1.1]">
+                        Good morning, <span class="font-semibold">Alex</span>.
+                    </h1>
+</div>
+<p class="text-xl text-slate-600 dark:text-text-secondary font-light max-w-lg leading-relaxed">
+                    Your net worth is up <span class="text-accent-teal font-medium">2.4%</span> this month. You remain on track for your retirement goals.
+                </p>
+<div class="pt-4">
+<button class="group relative inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white transition-all duration-200 bg-primary rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-surface-dark shadow-[0_0_20px_-5px_rgba(19,109,236,0.4)] hover:shadow-[0_0_25px_-5px_rgba(19,109,236,0.6)]">
+<span class="mr-2">View Portfolio</span>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Abstract Visualization / Hero Image -->
+<div class="relative h-[320px] w-full rounded-2xl overflow-hidden group shadow-2xl shadow-black/20">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-surface-card to-surface-dark z-10"></div>
+<!-- Decorative blurred shapes -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/30 rounded-full blur-[80px]"></div>
+<div class="absolute -bottom-20 -left-20 w-64 h-64 bg-accent-teal/20 rounded-full blur-[80px]"></div>
+<div class="relative z-20 h-full w-full p-8 flex flex-col justify-between" data-alt="Abstract 3D rendering of smooth glass waves representing financial flow" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuClRtuDiXTlLgAoD-8l_RB26qPMWKsYrrQ1I9wys9Xs4CvgL4TLiygTCAJYZrd-XCR304gR91T_SyXnie9E1LzR7kwFOBvHYCbFq3QcGqrMurTYO1jC0jS5dDGajErtm-mDvmFtW1vGTnJNjRZw9L_xF-rGjXEx1nPsHXHowUA93F1LE1Edit60eP7e9dzD7XLbQwaRYGXDD9TAJZn78dqq8fAmGk98qfpRA2lRpoYB3XLFaTgm-Svrd494NFImvbwM1IYHJ6ul5qw'); background-size: cover; background-position: center;">
+<div class="absolute inset-0 bg-surface-dark/40 backdrop-blur-[2px]"></div>
+<div class="relative flex justify-between items-start">
+<div class="bg-surface-dark/60 backdrop-blur-md border border-white/10 p-3 rounded-lg">
+<span class="material-symbols-outlined text-white/80">trending_up</span>
+</div>
+<div class="bg-accent-teal/20 backdrop-blur-md border border-accent-teal/30 px-3 py-1 rounded-full">
+<span class="text-xs font-bold text-accent-teal uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="relative">
+<p class="text-white/60 text-sm font-medium mb-1">Total Balance</p>
+<p class="text-4xl font-bold text-white tracking-tight">$124,592.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Grid -->
+<section class="fade-in-up delay-100 grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group relative p-6 rounded-xl bg-white dark:bg-surface-card border border-gray-200 dark:border-border-subtle hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-gray-50 dark:bg-surface-hover flex items-center justify-center text-slate-500 dark:text-text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<span class="flex items-center text-xs font-bold text-red-500 bg-red-500/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_down</span>
+                        5.3%
+                    </span>
+</div>
+<h3 class="text-sm font-medium text-slate-500 dark:text-text-secondary mb-1">Monthly Spending</h3>
+<p class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">$2,405.12</p>
+</div>
+<!-- Card 2 -->
+<div class="group relative p-6 rounded-xl bg-white dark:bg-surface-card border border-gray-200 dark:border-border-subtle hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-gray-50 dark:bg-surface-hover flex items-center justify-center text-slate-500 dark:text-text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">savings</span>
+</div>
+<span class="flex items-center text-xs font-bold text-accent-teal bg-accent-teal/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                        12%
+                    </span>
+</div>
+<h3 class="text-sm font-medium text-slate-500 dark:text-text-secondary mb-1">Savings Goal</h3>
+<p class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">$15,000.00</p>
+<div class="w-full bg-gray-200 dark:bg-surface-hover h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-accent-teal h-full rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative p-6 rounded-xl bg-white dark:bg-surface-card border border-gray-200 dark:border-border-subtle hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-gray-50 dark:bg-surface-hover flex items-center justify-center text-slate-500 dark:text-text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">show_chart</span>
+</div>
+<span class="flex items-center text-xs font-bold text-accent-teal bg-accent-teal/10 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                        4.2%
+                    </span>
+</div>
+<h3 class="text-sm font-medium text-slate-500 dark:text-text-secondary mb-1">Investment Returns</h3>
+<p class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">+$3,840.50</p>
+</div>
+</section>
+<!-- Main Content Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 fade-in-up delay-200">
+<!-- Left Column: Activity Feed -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-border-subtle">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Recent Activity</h2>
+<a class="text-sm font-medium text-primary hover:text-blue-400 transition-colors" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<!-- Item 1 -->
+<div class="flex items-center gap-4 p-4 rounded-lg hover:bg-white dark:hover:bg-surface-card transition-colors group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-border-subtle">
+<div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">shopping_bag</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 dark:text-white truncate">Whole Foods Market</p>
+<p class="text-xs text-slate-500 dark:text-text-secondary">Today, 10:23 AM • Groceries</p>
+</div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">-$142.80</p>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4 p-4 rounded-lg hover:bg-white dark:hover:bg-surface-card transition-colors group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-border-subtle">
+<div class="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 dark:text-white truncate">Payroll Deposit</p>
+<p class="text-xs text-slate-500 dark:text-text-secondary">Yesterday • Income</p>
+</div>
+<p class="text-sm font-bold text-accent-teal">+$4,250.00</p>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-4 p-4 rounded-lg hover:bg-white dark:hover:bg-surface-card transition-colors group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-border-subtle">
+<div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">subscriptions</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 dark:text-white truncate">Netflix Subscription</p>
+<p class="text-xs text-slate-500 dark:text-text-secondary">Oct 24 • Entertainment</p>
+</div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">-$15.99</p>
+</div>
+<!-- Item 4 -->
+<div class="flex items-center gap-4 p-4 rounded-lg hover:bg-white dark:hover:bg-surface-card transition-colors group cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-border-subtle">
+<div class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold text-slate-900 dark:text-white truncate">Downtown Bistro</p>
+<p class="text-xs text-slate-500 dark:text-text-secondary">Oct 23 • Dining</p>
+</div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">-$85.00</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Editorial Insights -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="flex items-center justify-between pb-2 border-b border-gray-200 dark:border-border-subtle">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Smart Insights</h2>
+</div>
+<div class="flex flex-col gap-6">
+<!-- Editorial Card 1 -->
+<article class="group cursor-pointer">
+<div class="h-48 w-full rounded-xl overflow-hidden mb-4 relative">
+<div class="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors z-10"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Close up of financial documents and calculator on a desk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBNUPDYahZqOC_5ukVczbmNtblZ36pV0c2mQ_icgyhHDihLmgnZjF_tZ2254EcrB1cdPHI5F0T7_e0YCUFs7n8cR7hh-N1rr2Okqw2tzat2_F6KrKBSkut1OtQnl-IBD6kCTaxALrAVDVSYUj-qTiPSvDWe9XH33Ii326YhGGcaDWxEycpCg74yK6LxfovDbMcmOoU1M0qxmUDJmGE_r8j3HQWiZQCh_Q5eqoROLbFVHfBIFQAo5j7D23WJwFUyTCeN-EVSb5hm_k8');"></div>
+<div class="absolute top-3 left-3 z-20">
+<span class="px-2 py-1 bg-white/90 dark:bg-surface-dark/90 backdrop-blur text-[10px] font-bold uppercase tracking-widest text-primary rounded-md">Strategy</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors">Optimizing your tax strategy for Q4</h3>
+<p class="text-sm text-slate-600 dark:text-text-secondary line-clamp-2">
+                                As the fiscal year closes, discover three key moves to maximize your returns and minimize liabilities before December 31st.
+                            </p>
+<div class="flex items-center gap-2 mt-1 text-xs font-medium text-slate-500 dark:text-text-secondary">
+<span>5 min read</span>
+<span>•</span>
+<span>By Sarah Jenkins</span>
+</div>
+</div>
+</article>
+<hr class="border-gray-200 dark:border-border-subtle"/>
+<!-- Editorial Card 2 (Text heavy) -->
+<article class="group cursor-pointer flex gap-4 items-start">
+<div class="flex-1 flex flex-col gap-2">
+<span class="text-xs font-bold uppercase tracking-widest text-accent-teal">Analysis</span>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors">Market Shift: The new safe havens</h3>
+<p class="text-xs text-slate-600 dark:text-text-secondary line-clamp-2">
+                                Traditional bonds are fluctuating. Here is where institutional investors are moving their liquidity this quarter.
+                            </p>
+</div>
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="Abstract blue graphical stock market chart" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcWSHC39r2osKDMOYZeVioauIp1BiGxjoGRhx6H461iIeuanKDIY4dTnWKg7Z5juYUBMpezqvhzTDLjNfZ7QWXMDP-SwO6qRVMk1mVHIv5nwnfE5uz9QrYrOKOxLUZcCVCi1QLMjY8mx84-GMi4iFs3TZZtgdpHm9GrMz6sDPP409ElTUmU3a-M-aMcDcQp9VQyUMoMtZDkwL4o1WWLcr3AuJ7HAMmtVS6-VWrgcDwwppyy107pphMloqvp-lVnPLSPBT2PSpcsmE');"></div>
+</div>
+</article>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto border-t border-gray-200 dark:border-border-subtle bg-white dark:bg-surface-dark py-12">
+<div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start gap-1">
+<div class="flex items-center gap-2 text-slate-900 dark:text-white">
+<span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+<span class="font-bold text-sm">Finance</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-text-secondary">© 2023 Finance Inc. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-xs font-medium text-slate-500 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Privacy</a>
+<a class="text-xs font-medium text-slate-500 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Terms</a>
+<a class="text-xs font-medium text-slate-500 dark:text-text-secondary hover:text-slate-900 dark:hover:text-white transition-colors" href="#">Support</a>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-surface-card border border-gray-200 dark:border-border-subtle">
+<span class="material-symbols-outlined text-[14px] text-green-500">lock</span>
+<span class="text-[10px] font-bold text-slate-500 dark:text-text-secondary uppercase tracking-wider">Bank Grade Security</span>
+</div>
+</div>
+</footer>
+</body></html>

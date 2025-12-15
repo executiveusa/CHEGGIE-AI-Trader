@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cheggie Lifestyle Finance Spec",
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-14",
+  
+  "site": {
+    "name": "Cheggie Lifestyle Finance",
+    "url": "https://cheggie-lifestyle-finance.lovable.app",
+    "type": "personal-brand",
+    "stack": {
+      "framework": "Vite + React 18",
+      "language": "TypeScript",
+      "styling": "Tailwind CSS + shadcn/ui",
+      "state": "TanStack Query",
+      "routing": "React Router v6",
+      "i18n": "react-i18next",
+      "animation": "Framer Motion",
+      "backend": "Supabase"
+    }
+  },
+
+  "languages": [
+    {
+      "code": "sr-Latn",
+      "name": "Srpski (latinica)",
+      "flag": "🇷🇸",
+      "direction": "ltr",
+      "script": "Latin",
+      "fallback": "en"
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "flag": "🇬🇧",
+      "direction": "ltr",
+      "script": "Latin",
+      "fallback": null
+    },
+    {
+      "code": "es-MX",
+      "name": "Español (MX)",
+      "flag": "🇲🇽",
+      "direction": "ltr",
+      "script": "Latin",
+      "fallback": "en"
+    }
+  ],
+
+  "routes": {
+    "public": [
+      { "path": "/", "component": "Index", "agid": "page-home" },
+      { "path": "/language", "component": "LanguageSelection", "agid": "page-language" },
+      { "path": "/auth", "component": "Auth", "agid": "page-auth" }
+    ],
+    "protected": [
+      { "path": "/dashboard", "component": "Dashboard", "agid": "page-dashboard" },
+      { "path": "/agents", "component": "AgentsConsole", "agid": "page-agents" }
+    ],
+    "admin": [
+      { "path": "/admin", "component": "AdminLogin", "agid": "page-admin-login" },
+      { "path": "/admin/assistant", "component": "AdminAssistant", "agid": "page-admin-assistant" },
+      { "path": "/admin/agents", "component": "AdminAgents", "agid": "page-admin-agents" }
+    ]
+  },
+
+  "sections": {
+    "home": [
+      {
+        "id": "hero",
+        "agid": "home-hero",
+        "title": "Hero Section",
+        "type": "full-viewport",
+        "voice": "first-person",
+        "animation": "split-text-reveal"
+      },
+      {
+        "id": "tracking",
+        "agid": "section-tracking",
+        "title": "What I'm Tracking Now",
+        "type": "snapshot",
+        "animation": "fade-up-stagger"
+      },
+      {
+        "id": "insights",
+        "agid": "section-insights",
+        "title": "Selected Insights",
+        "type": "grid",
+        "animation": "reveal-stagger"
+      },
+      {
+        "id": "about",
+        "agid": "section-about",
+        "title": "About Me",
+        "type": "two-column",
+        "animation": "fade-up"
+      },
+      {
+        "id": "cta",
+        "agid": "section-cta",
+        "title": "Call to Action",
+        "type": "banner",
+        "animation": "scale-up"
+      }
+    ],
+    "dashboard": [
+      {
+        "id": "market-pulse",
+        "agid": "tile-market-pulse",
+        "title": "Market Pulse",
+        "span": "col-span-8 row-span-2"
+      },
+      {
+        "id": "watchlist",
+        "agid": "tile-watchlist",
+        "title": "Watchlist",
+        "span": "col-span-4"
+      },
+      {
+        "id": "brief",
+        "agid": "tile-brief",
+        "title": "Daily Brief",
+        "span": "col-span-4"
+      },
+      {
+        "id": "notes",
+        "agid": "tile-notes",
+        "title": "Notes",
+        "span": "col-span-6"
+      },
+      {
+        "id": "actions",
+        "agid": "tile-actions",
+        "title": "Quick Actions",
+        "span": "col-span-6"
+      }
+    ]
+  },
+
+  "navigation": {
+    "primary": {
+      "agid": "nav-primary",
+      "items": [
+        { "key": "dashboard", "href": "/dashboard", "protected": true },
+        { "key": "tracking", "href": "#tracking", "scroll": true },
+        { "key": "insights", "href": "#insights", "scroll": true },
+        { "key": "about", "href": "#about", "scroll": true }
+      ],
+      "actions": [
+        { "key": "login", "href": "/auth", "variant": "ghost" },
+        { "key": "signup", "href": "/auth", "variant": "primary" }
+      ]
+    },
+    "footer": {
+      "agid": "footer-main",
+      "columns": [
+        {
+          "title": "Navigation",
+          "items": ["tracking", "insights", "about"]
+        },
+        {
+          "title": "Resources",
+          "items": ["docs", "status", "api"]
+        },
+        {
+          "title": "Legal",
+          "items": ["privacy", "terms", "security"]
+        }
+      ]
+    }
+  },
+
+  "motion": {
+    "durations": {
+      "instant": 100,
+      "fast": 200,
+      "normal": 400,
+      "entering": 500,
+      "slow": 800,
+      "glacial": 1200
+    },
+    "easings": {
+      "outExpo": [0.16, 1, 0.3, 1],
+      "inOutExpo": [0.87, 0, 0.13, 1],
+      "spring": [0.22, 1.2, 0.36, 1]
+    },
+    "patterns": {
+      "fadeUp": {
+        "initial": { "opacity": 0, "y": 20 },
+        "animate": { "opacity": 1, "y": 0 },
+        "duration": 500
+      },
+      "reveal": {
+        "initial": { "opacity": 0, "y": 40 },
+        "animate": { "opacity": 1, "y": 0 },
+        "duration": 600,
+        "trigger": "inView"
+      },
+      "stagger": {
+        "staggerChildren": 0.1,
+        "delayChildren": 0.2
+      }
+    }
+  },
+
+  "components": {
+    "magnetic-button": {
+      "file": "src/components/ui/magnetic-button.tsx",
+      "props": ["children", "strength", "asChild"],
+      "defaults": { "strength": 0.3 }
+    },
+    "animated-number": {
+      "file": "src/components/ui/animated-number.tsx",
+      "props": ["value", "suffix", "duration"],
+      "defaults": { "duration": 2000 }
+    },
+    "reveal": {
+      "file": "src/components/ui/reveal.tsx",
+      "props": ["children", "delay", "direction"],
+      "defaults": { "delay": 0, "direction": "up" }
+    }
+  },
+
+  "i18n": {
+    "defaultLanguage": "en",
+    "fallbackLanguage": "en",
+    "namespaces": ["translation"],
+    "requiredKeys": [
+      "nav.dashboard",
+      "nav.login",
+      "nav.signup",
+      "hero.title",
+      "hero.subtitle",
+      "hero.cta",
+      "footer.tagline",
+      "footer.copyright",
+      "section.tracking.title",
+      "section.insights.title",
+      "section.about.title"
+    ]
+  },
+
+  "removedFromPublic": [
+    "pricing",
+    "testimonials"
+  ],
+
+  "stitchAssets": {
+    "basePath": "public/stitch_language_selection/stitch_language_selection",
+    "assets": [
+      {
+        "name": "language_selection",
+        "path": "language_selection/screen.png",
+        "usage": "LanguageSelection component"
+      },
+      {
+        "name": "public_homepage_hero",
+        "path": "public_homepage_hero/screen.png",
+        "usage": "HeroPersonal component"
+      },
+      {
+        "name": "home_page_1",
+        "path": "home_page_1/screen.png",
+        "usage": "Landing layout reference"
+      },
+      {
+        "name": "user_dashboard",
+        "path": "user_dashboard/screen.png",
+        "usage": "Dashboard bento grid"
+      },
+      {
+        "name": "advisor_dashboard",
+        "path": "advisor_client_dashboard/screen.png",
+        "usage": "Admin/advisor view"
+      }
+    ]
+  },
+
+  "qa": {
+    "checklist": [
+      { "id": "nav-works", "test": "Navigation anchors scroll to sections" },
+      { "id": "lang-toggle", "test": "Language toggle changes all text" },
+      { "id": "serbian-latin", "test": "Serbian shows as Srpski (latinica)" },
+      { "id": "spanish-mx", "test": "Spanish shows as Español (MX) with 🇲🇽" },
+      { "id": "pricing-removed", "test": "Pricing section not on public landing" },
+      { "id": "dashboard-private", "test": "Dashboard requires authentication" },
+      { "id": "reduced-motion", "test": "Animations respect prefers-reduced-motion" },
+      { "id": "a11y-contrast", "test": "Color contrast passes WCAG AA" }
+    ]
+  }
+}

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cheggie AI - Command Center</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6","primary-dark": "#2563eb",
+                        "accent-teal": "#14b8a6","accent-teal-dim": "rgba(20, 184, 166, 0.1)",
+                        "danger": "#ef4444",
+                        "surface-dark": "#0B0F15","surface-card": "#151B25","surface-hover": "#1E2633",
+                        "border-subtle": "#232D3B",
+                        "border-active": "#374151",
+                        "text-primary": "#f8fafc",
+                        "text-secondary": "#94a3b8",
+                        "text-muted": "#64748b",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "glow": "0 0 20px -5px rgba(59, 130, 246, 0.15)",
+                        "lift": "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2e3c50; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3e4f66; }.delay-1 { animation-delay: 50ms; }
+        .delay-2 { animation-delay: 100ms; }
+        .delay-3 { animation-delay: 150ms; }
+        .delay-4 { animation-delay: 200ms; }
+        .delay-5 { animation-delay: 250ms; }
+        .delay-6 { animation-delay: 300ms; }
+        .delay-7 { animation-delay: 350ms; }
+        .delay-8 { animation-delay: 400ms; }.instrument-card {
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), 
+                        box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1),
+                        border-color 0.3s ease;
+        }
+        .instrument-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: var(--theme-shadow-lift), 0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+        .instrument-card .content-nudge {
+            transition: transform 0.3s ease;
+        }
+        .instrument-card:hover .content-nudge {
+            transform: translateY(-2px);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }.magnetic-btn::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #3b82f6, #14b8a6);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+            filter: blur(8px);
+        }
+        .magnetic-btn:hover::after {
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-surface-dark text-slate-900 dark:text-text-primary font-display antialiased min-h-screen flex flex-col selection:bg-primary/30 selection:text-white">
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-border-subtle bg-gray-50/90 dark:bg-surface-dark/90 backdrop-blur-xl">
+<div class="max-w-[1600px] mx-auto px-4 h-16 flex items-center justify-between gap-4">
+<div class="flex items-center gap-4 min-w-fit">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-8 h-8 rounded bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="font-bold text-sm tracking-tighter">AI</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold tracking-tight text-slate-900 dark:text-white leading-none">Cheggie</span>
+<span class="text-[10px] font-medium text-slate-500 dark:text-text-muted leading-none mt-1 group-hover:text-primary transition-colors">Finance &amp; Lifestyle</span>
+</div>
+</a>
+<div class="hidden lg:block h-8 w-px bg-gray-200 dark:bg-border-subtle mx-2"></div>
+<span class="hidden lg:block text-xs font-medium text-slate-500 dark:text-text-muted">Your daily finance + lifestyle brief</span>
+</div>
+<div class="flex-1 max-w-xl mx-auto hidden md:block">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-[#1A212C] border border-transparent dark:border-border-subtle rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-text-muted focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-surface-card transition-all" placeholder="Search ticker, company, or notes... (Cmd+K)" type="text"/>
+<div class="absolute inset-y-0 right-0 pr-2 flex items-center">
+<kbd class="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-gray-200 dark:border-border-subtle bg-gray-50 dark:bg-surface-hover text-[10px] font-mono text-slate-400">⌘K</kbd>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 min-w-fit">
+<div class="hidden sm:flex items-center p-0.5 rounded-lg border border-gray-200 dark:border-border-subtle bg-white dark:bg-surface-card">
+<button class="px-2 py-1 rounded-md text-[10px] font-bold bg-gray-100 dark:bg-surface-hover text-slate-900 dark:text-white shadow-sm transition-all">EN</button>
+<button class="px-2 py-1 rounded-md text-[10px] font-medium text-slate-500 dark:text-text-muted hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1">
+<span>🇲🇽</span> ES
+                </button>
+<button class="px-2 py-1 rounded-md text-[10px] font-medium text-slate-500 dark:text-text-muted hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1" title="Srpski (latinica)">
+<span>🇷🇸</span> SR
+                </button>
+</div>
+<div class="h-6 w-px bg-gray-200 dark:bg-border-subtle mx-1"></div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 dark:text-text-secondary hover:bg-gray-100 dark:hover:bg-surface-hover transition-colors">
+<span class="material-symbols-outlined text-[20px]">dark_mode</span>
+</button>
+<button class="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-border-subtle ring-2 ring-transparent hover:ring-primary/50 transition-all">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB44NGi3ijco8v85_UiryawHVP5yZwjb1S_-uiG8fY_Lp7UbgQ_4L8PQBBS58gjg2dlZEexj1ewhjH0XCr6RH_XN_PoMMMnT6ByAC_tpd3kKI-w_KNI_m1j2-3N0BtyknkJoqvkR1W5Sl29iovk7_qVsfhwTpzIS-pHWlI5SdTd3JB4cFdu2MEnyfm9k-U5dP0JpSO0rWOQ4yJA72AdS1eIo1qD09roOtYiQSmlWQoJWjbJGzMcFPeX4NdBscjUoXla7waJJ6-Xuy4"/>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-[1600px] mx-auto px-4 md:px-6 py-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 auto-rows-min grid-flow-dense">
+<article class="instrument-card lg:col-span-2 lg:row-span-2 relative group flex flex-col justify-between bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-8 overflow-hidden animate-fade-in delay-1">
+<div class="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:translate-x-0 translate-x-4">
+<button class="magnetic-btn relative px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg text-sm font-semibold transition-all">
+                    Read Full Brief
+                </button>
+</div>
+<div class="content-nudge flex flex-col gap-6 relative z-10">
+<div class="flex items-center gap-2">
+<span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+<h2 class="text-xs font-bold uppercase tracking-widest text-primary">Today's Brief</h2>
+</div>
+<div class="space-y-4 max-w-lg">
+<h1 class="text-3xl md:text-4xl font-semibold text-slate-900 dark:text-white leading-tight">
+                        Inflation cools, tech rallies, and a new look at your bond strategy.
+                    </h1>
+<p class="text-lg text-slate-600 dark:text-text-secondary leading-relaxed">
+                        Markets are reacting positively to the latest CPI print. It’s time to re-evaluate the defensive positions in your portfolio before the next Fed meeting.
+                    </p>
+</div>
+</div>
+<div class="content-nudge mt-8 flex items-center gap-4 border-t border-gray-100 dark:border-border-subtle pt-6">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-text-muted">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span>3 min read</span>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-text-muted">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+<span>Audio available</span>
+</div>
+</div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+</article>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col justify-between animate-fade-in delay-2">
+<div class="content-nudge flex justify-between items-start">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Market Pulse</h3>
+<p class="text-xs text-slate-500 dark:text-text-muted mt-1">What changed since yesterday</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-accent-teal-dim flex items-center justify-center text-accent-teal">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+</div>
+</div>
+<div class="content-nudge mt-6 grid grid-cols-2 gap-4">
+<div>
+<span class="text-xs text-slate-500 dark:text-text-muted block mb-0.5">S&amp;P 500</span>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-bold text-slate-900 dark:text-white tabular-nums">4,783</span>
+<span class="text-xs font-bold text-accent-teal bg-accent-teal/10 px-1.5 py-0.5 rounded tabular-nums">+1.2%</span>
+</div>
+</div>
+<div>
+<span class="text-xs text-slate-500 dark:text-text-muted block mb-0.5">NASDAQ</span>
+<div class="flex items-baseline gap-2">
+<span class="text-xl font-bold text-slate-900 dark:text-white tabular-nums">16,420</span>
+<span class="text-xs font-bold text-accent-teal bg-accent-teal/10 px-1.5 py-0.5 rounded tabular-nums">+1.8%</span>
+</div>
+</div>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-2 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col animate-fade-in delay-3">
+<div class="content-nudge flex justify-between items-center mb-6">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Watchlist</h3>
+<p class="text-xs text-slate-500 dark:text-text-muted mt-1">Names worth checking today</p>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+<div class="content-nudge flex-1 flex flex-col gap-1">
+<div class="group/item flex items-center justify-between p-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 dark:bg-surface-dark flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-text-secondary">NVDA</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">NVIDIA</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Chipmaker rally</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-accent-teal tabular-nums">+2.4%</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted tabular-nums">$482.10</p>
+</div>
+</div>
+<div class="group/item flex items-center justify-between p-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 dark:bg-surface-dark flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-text-secondary">AAPL</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Apple Inc.</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Keynote pending</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-slate-500 dark:text-text-muted tabular-nums">0.0%</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted tabular-nums">$192.50</p>
+</div>
+</div>
+<div class="group/item flex items-center justify-between p-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 dark:bg-surface-dark flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-text-secondary">TSLA</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Tesla</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Volatility alert</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-danger tabular-nums">-1.8%</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted tabular-nums">$235.40</p>
+</div>
+</div>
+<div class="group/item flex items-center justify-between p-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-100 dark:bg-surface-dark flex items-center justify-center text-[10px] font-bold text-slate-700 dark:text-text-secondary">MSFT</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Microsoft</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">AI release</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-accent-teal tabular-nums">+0.9%</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted tabular-nums">$375.10</p>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-gray-100 dark:border-border-subtle opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-full py-2 text-xs font-semibold text-slate-600 dark:text-text-secondary hover:text-primary transition-colors flex items-center justify-center gap-2">
+                    View full watchlist <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col justify-center animate-fade-in delay-4">
+<div class="content-nudge">
+<h3 class="text-base font-bold text-slate-900 dark:text-white mb-4">Quick Analyze</h3>
+<div class="relative">
+<input class="w-full bg-gray-50 dark:bg-surface-dark border border-gray-200 dark:border-border-subtle rounded-lg py-3 px-4 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all placeholder-slate-400" placeholder="Enter ticker (e.g. GOOGL)" type="text"/>
+<button class="absolute right-2 top-2 bottom-2 aspect-square bg-primary text-white rounded-md flex items-center justify-center hover:bg-primary-dark transition-colors">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<div class="mt-3 flex gap-2">
+<span class="text-[10px] font-medium px-2 py-1 rounded bg-gray-100 dark:bg-surface-hover text-slate-500 cursor-pointer hover:text-primary transition-colors">PLTR</span>
+<span class="text-[10px] font-medium px-2 py-1 rounded bg-gray-100 dark:bg-surface-hover text-slate-500 cursor-pointer hover:text-primary transition-colors">AMD</span>
+<span class="text-[10px] font-medium px-2 py-1 rounded bg-gray-100 dark:bg-surface-hover text-slate-500 cursor-pointer hover:text-primary transition-colors">COIN</span>
+</div>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col animate-fade-in delay-5 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-20 h-20 bg-danger/10 blur-2xl rounded-full pointer-events-none"></div>
+<div class="content-nudge flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Risk Flags</h3>
+<p class="text-xs text-slate-500 dark:text-text-muted mt-1">Things that can hurt you first</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-danger">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+</div>
+<div class="content-nudge flex-1 flex flex-col justify-end gap-3">
+<div class="flex items-start gap-3 p-3 bg-red-50 dark:bg-surface-hover/50 rounded-lg border border-red-100 dark:border-white/5">
+<div class="h-1.5 w-1.5 rounded-full bg-danger mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-900 dark:text-white">Portfolio Concentration</p>
+<p class="text-[10px] text-slate-500 dark:text-text-secondary mt-0.5">Tech sector exceeds 45% allocation.</p>
+</div>
+</div>
+</div>
+<div class="mt-2 text-right">
+<a class="text-[10px] font-bold text-danger hover:underline" href="#">Review Risks</a>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col animate-fade-in delay-6">
+<div class="content-nudge flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Notes</h3>
+<p class="text-xs text-slate-500 dark:text-text-muted mt-1">Capture decisions fresh</p>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">edit_note</span>
+</button>
+</div>
+<div class="content-nudge flex-1">
+<div class="p-3 bg-yellow-50 dark:bg-surface-hover rounded-lg border border-yellow-100 dark:border-white/5 h-full relative group/note cursor-pointer">
+<p class="text-xs font-serif italic text-slate-700 dark:text-text-secondary line-clamp-3">
+                        "Consider rebalancing the crypto holdings if BTC hits 45k support. Talk to accountant about tax loss harvesting..."
+                    </p>
+<span class="absolute bottom-2 right-3 text-[10px] text-slate-400">Yesterday</span>
+</div>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col animate-fade-in delay-7">
+<div class="content-nudge flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Upcoming</h3>
+</div>
+<span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-1 rounded-full">2 New</span>
+</div>
+<div class="content-nudge space-y-3">
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-surface-hover flex flex-col items-center justify-center text-center flex-shrink-0">
+<span class="text-[8px] font-bold text-slate-500 uppercase">Oct</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">28</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-900 dark:text-white">AAPL Earnings Call</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">17:00 EST • High Impact</p>
+</div>
+</div>
+<div class="flex gap-3 items-center">
+<div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-surface-hover flex flex-col items-center justify-center text-center flex-shrink-0">
+<span class="text-[8px] font-bold text-slate-500 uppercase">Nov</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">01</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-900 dark:text-white">FOMC Meeting</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Rate decision expected</p>
+</div>
+</div>
+</div>
+</section>
+<section class="instrument-card lg:col-span-1 lg:row-span-1 bg-white dark:bg-surface-card rounded-2xl border border-gray-200 dark:border-border-subtle p-6 flex flex-col animate-fade-in delay-8">
+<div class="content-nudge flex justify-between items-start mb-4">
+<div>
+<h3 class="text-base font-bold text-slate-900 dark:text-white">Saved Briefs</h3>
+<p class="text-xs text-slate-500 dark:text-text-muted mt-1">Past memos, instantly</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">bookmark</span>
+</div>
+<div class="content-nudge flex-1 flex flex-col gap-2">
+<a class="block p-2 -mx-2 rounded hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors" href="#">
+<p class="text-xs font-medium text-slate-900 dark:text-white truncate">Q3 Strategy Shift: Defensive Plays</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Oct 12 • 4 min read</p>
+</a>
+<a class="block p-2 -mx-2 rounded hover:bg-gray-50 dark:hover:bg-surface-hover transition-colors" href="#">
+<p class="text-xs font-medium text-slate-900 dark:text-white truncate">Energy Sector Deep Dive</p>
+<p class="text-[10px] text-slate-500 dark:text-text-muted">Sep 28 • 6 min read</p>
+</a>
+</div>
+</section>
+</div>
+</main>
+
+</body></html>

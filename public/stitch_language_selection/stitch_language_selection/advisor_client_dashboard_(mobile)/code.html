@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Advisor Client Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111822",
+                        "card-dark": "#1C2632",
+                        "card-hover": "#233348",
+                        "text-secondary": "#92a9c9",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", 
+                        "lg": "0.5rem", 
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-x-hidden">
+<!-- Mobile Container -->
+<div class="relative min-h-screen flex flex-col max-w-md mx-auto w-full shadow-2xl bg-[#111822] border-x border-[#233348]">
+<!-- Sticky Header -->
+<header class="sticky top-0 z-30 bg-[#111822]/95 backdrop-blur-md border-b border-[#233348] px-4 py-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+</div>
+<h1 class="text-white text-lg font-bold tracking-tight">Advisor Dash</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-9 rounded-full bg-[#233348] hover:bg-[#2d4059] text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="relative flex items-center justify-center size-9 rounded-full bg-[#233348] hover:bg-[#2d4059] text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-[#111822]"></span>
+</button>
+<div class="size-9 rounded-full bg-cover bg-center border border-[#233348]" data-alt="Advisor profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA5uKoHmyCPJ-emf_jowMVJtAJHSBMQjqbmGGSEtA_Evnbq4KiFMOyPBEAUC_xuDaeYVhXBDRPaWelr2UL1H354UTAHGFBG_FunB52q1bbnQNIXteB54tmo2xdIPSI1VXx6RGgVTdb2c6W4LC_qrgZx-yTu2tjPQ6OF3FeTKWX46CMhTnKxH8ws2g4xl2WoVPUwWuiXKFnYuiU5IF3CXDW5SVBe0YZc28PV-xZXRq5k5KsYDq5XDDWnFPArl9LId0Kizm9BitF4XW0');"></div>
+</div>
+</div>
+</header>
+<!-- Filters (Chips) -->
+<div class="sticky top-[60px] z-20 bg-[#111822] py-3 pl-4 border-b border-[#233348]/50">
+<div class="flex gap-3 overflow-x-auto pr-4 no-scrollbar pb-1">
+<button class="flex shrink-0 items-center justify-center h-8 px-4 rounded-full bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20">
+                    All Clients
+                </button>
+<button class="flex shrink-0 items-center justify-center h-8 px-4 rounded-full bg-[#233348] text-[#92a9c9] border border-[#233348] text-sm font-medium whitespace-nowrap">
+                    Needs Review <span class="ml-1.5 flex items-center justify-center bg-red-500/20 text-red-400 text-[10px] size-4 rounded-full">3</span>
+</button>
+<button class="flex shrink-0 items-center justify-center h-8 px-4 rounded-full bg-[#233348] text-[#92a9c9] border border-[#233348] text-sm font-medium whitespace-nowrap">
+                    High Risk
+                </button>
+<button class="flex shrink-0 items-center justify-center h-8 px-4 rounded-full bg-[#233348] text-[#92a9c9] border border-[#233348] text-sm font-medium whitespace-nowrap">
+                    VIP Tier
+                </button>
+<button class="flex shrink-0 items-center justify-center h-8 px-4 rounded-full bg-[#233348] text-[#92a9c9] border border-[#233348] text-sm font-medium whitespace-nowrap">
+                    Pending Tasks
+                </button>
+</div>
+</div>
+<!-- Main Content: Client Cards Feed -->
+<main class="flex-1 px-4 py-4 flex flex-col gap-4 pb-24">
+<!-- Card 1: Critical Status -->
+<article class="group relative flex flex-col bg-card-dark rounded-xl p-4 border border-[#233348] hover:border-primary/50 active:scale-[0.98] transition-all cursor-pointer shadow-sm">
+<!-- Header -->
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-3">
+<div class="relative">
+<div class="size-12 rounded-full bg-cover bg-center ring-2 ring-[#233348]" data-alt="Sofia Martinez portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCLYdRUolL9Zfurcg6rntFGrCQTdTTNt29cb_gMrD3aV9TVaSXwSThdDjLpDghdICIKeSY9BQe7JxnE_w1WHvrerKPUACPV0RyLSb0eGVOFwPCQLgUkVhtoNMbbwEvsynKi97bou_XUml0YQABezM5p0hyvHSFXo4bESWKzvmZbrdyGMsT-FqBQyjwVc1OJ4SZlkhpxRndifKY74xk3m7RB2M20j7_LnT7KMCHGRTXshq1nyuFgRdXqMZnkbbD3oJTRr_VS1moSnA');"></div>
+<div class="absolute -bottom-1 -right-1 bg-[#111822] rounded-full p-0.5 border border-[#233348]">
+<span class="text-xs block size-4 text-center leading-4">🇲🇽</span>
+</div>
+</div>
+<div>
+<h3 class="text-white font-bold text-base leading-tight">Sofia Martinez</h3>
+<p class="text-text-secondary text-xs mt-0.5">Household • ES-MX</p>
+</div>
+</div>
+<span class="flex items-center justify-center size-8 rounded-full bg-[#233348] text-text-secondary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</span>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Next Review</p>
+<p class="text-sm font-medium text-white">Nov 12, 2024</p>
+</div>
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Tier</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-yellow-500 text-[14px] fill-1">stars</span>
+<p class="text-sm font-medium text-white">Gold VIP</p>
+</div>
+</div>
+</div>
+<!-- Footer / Status -->
+<div class="flex items-center justify-between pt-3 border-t border-[#233348]">
+<div class="flex items-center gap-2 text-yellow-500">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="text-xs font-semibold">3 Tasks Pending</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="h-1.5 w-16 bg-[#233348] rounded-full overflow-hidden">
+<div class="h-full bg-yellow-500 w-[60%]"></div>
+</div>
+<span class="text-xs text-text-secondary font-medium">Health: 60%</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Good Status -->
+<article class="group relative flex flex-col bg-card-dark rounded-xl p-4 border border-[#233348] hover:border-primary/50 active:scale-[0.98] transition-all cursor-pointer shadow-sm">
+<!-- Header -->
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-3">
+<div class="relative">
+<div class="size-12 rounded-full bg-cover bg-center ring-2 ring-[#233348]" data-alt="Liam Johnson portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDq99HievU_Xd93M8IReK3r-7J3_HeELMRAj_J0BqZkt5oVFtgwuiGcj8_6DV7MYo6OU_Q4KVzBtqGIl0WIdINQBO3ANaHD2fhMX7LQDyROsE_XKOSXQp08ItfgnObyBfZELK0A8wRSPKfLogyBpYrpmWaCH-PPFXuB3qN7MVtsTZOSkfFmlUqHBWauY0gp9Y1BgPr7OTF80EifuWkbdaCOJ8g_2NhM5rL3wwfU4XRSFegxqws_Xw-Ye-1JpTpVEQN2SEYU4JKpLqY');"></div>
+<div class="absolute -bottom-1 -right-1 bg-[#111822] rounded-full p-0.5 border border-[#233348]">
+<span class="text-xs block size-4 text-center leading-4">🇺🇸</span>
+</div>
+</div>
+<div>
+<h3 class="text-white font-bold text-base leading-tight">Liam Johnson</h3>
+<p class="text-text-secondary text-xs mt-0.5">Individual • EN</p>
+</div>
+</div>
+<span class="flex items-center justify-center size-8 rounded-full bg-[#233348] text-text-secondary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</span>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Next Review</p>
+<p class="text-sm font-medium text-white">Dec 01, 2024</p>
+</div>
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Tier</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400 text-[14px]">shield</span>
+<p class="text-sm font-medium text-white">Silver</p>
+</div>
+</div>
+</div>
+<!-- Footer / Status -->
+<div class="flex items-center justify-between pt-3 border-t border-[#233348]">
+<div class="flex items-center gap-2 text-emerald-500">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="text-xs font-semibold">All Tasks Complete</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="h-1.5 w-16 bg-[#233348] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[98%]"></div>
+</div>
+<span class="text-xs text-text-secondary font-medium">Health: 98%</span>
+</div>
+</div>
+</article>
+<!-- Card 3: International -->
+<article class="group relative flex flex-col bg-card-dark rounded-xl p-4 border border-[#233348] hover:border-primary/50 active:scale-[0.98] transition-all cursor-pointer shadow-sm">
+<!-- Header -->
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-3">
+<div class="relative">
+<div class="size-12 rounded-full bg-cover bg-center ring-2 ring-[#233348]" data-alt="Ana Petrovic portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDW1bopCRExCnJknCD-DWayF1YbevmULoHbXyTcuy7Px2j1gZNoaSexmZVPtsIl9HsJKTaEBovGXiY4aIQTGJD6Mfcvkobe91DgYz50NzsHTqCJtDruVCPggyEzI3xnCv5ksHyldWt7eiOYDPy90Aou9HM37KqiMB5BNA6X8ywgpdjBlMey-7ufeal1K-NxqGS1ETG1cNMSa6tvYDJZkAvLCg_QAQNRKKgx0ziimMdyd1VlTKsltSgzO0VA4Z3f1hz3pCbwf8YZ5Uc');"></div>
+<div class="absolute -bottom-1 -right-1 bg-[#111822] rounded-full p-0.5 border border-[#233348]">
+<span class="text-xs block size-4 text-center leading-4">🇷🇸</span>
+</div>
+</div>
+<div>
+<h3 class="text-white font-bold text-base leading-tight">Ana Petrović</h3>
+<p class="text-text-secondary text-xs mt-0.5">Household • SR-Latn</p>
+</div>
+</div>
+<span class="flex items-center justify-center size-8 rounded-full bg-[#233348] text-text-secondary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</span>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Next Review</p>
+<p class="text-sm font-medium text-white">Jan 15, 2025</p>
+</div>
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Tier</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-purple-400 text-[14px]">diamond</span>
+<p class="text-sm font-medium text-white">Platinum</p>
+</div>
+</div>
+</div>
+<!-- Footer / Status -->
+<div class="flex items-center justify-between pt-3 border-t border-[#233348]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-xs font-semibold">1 Task Pending</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="h-1.5 w-16 bg-[#233348] rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+<span class="text-xs text-text-secondary font-medium">Health: 85%</span>
+</div>
+</div>
+</article>
+<!-- Card 4: Standard -->
+<article class="group relative flex flex-col bg-card-dark rounded-xl p-4 border border-[#233348] hover:border-primary/50 active:scale-[0.98] transition-all cursor-pointer shadow-sm opacity-80">
+<!-- Header -->
+<div class="flex items-start justify-between mb-4">
+<div class="flex gap-3">
+<div class="relative">
+<div class="size-12 rounded-full bg-cover bg-center ring-2 ring-[#233348]" data-alt="Wei Chen portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRKtnDnXC_8BdMTuXw7G_ik0BFlY0efZdzvq41GiGjKrSHq0egA-8YXXGTHYQWH5QYuPCJYsr-VEi6vPSR1CQcU3ufEqAUqvyYC7EIS7Mdsn5k2QSSiWctw2D1MxlGY8jZSuQSnK0keAu8w4pG6WkgiDHO3aRywRS0Vq77h02-i9Swr2JfJ2oT7XhCvnv56TUxQEW72rSrEPMI2O2u95-EawMLa0DK6z-ZEIsAQ4xYADuk63mX0ThOIBCPLbBNAkUyCf25ptMC6W0');"></div>
+<div class="absolute -bottom-1 -right-1 bg-[#111822] rounded-full p-0.5 border border-[#233348]">
+<span class="text-xs block size-4 text-center leading-4">🇨🇦</span>
+</div>
+</div>
+<div>
+<h3 class="text-white font-bold text-base leading-tight">Wei Chen</h3>
+<p class="text-text-secondary text-xs mt-0.5">Individual • EN</p>
+</div>
+</div>
+<span class="flex items-center justify-center size-8 rounded-full bg-[#233348] text-text-secondary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</span>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Next Review</p>
+<p class="text-sm font-medium text-white">Feb 20, 2025</p>
+</div>
+<div class="bg-[#111822]/50 rounded-lg p-2.5 border border-[#233348]/50">
+<p class="text-[10px] uppercase tracking-wider text-text-secondary font-semibold mb-1">Tier</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400 text-[14px]">shield</span>
+<p class="text-sm font-medium text-white">Silver</p>
+</div>
+</div>
+</div>
+<!-- Footer / Status -->
+<div class="flex items-center justify-between pt-3 border-t border-[#233348]">
+<div class="flex items-center gap-2 text-text-secondary">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="text-xs font-semibold">Up to date</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="h-1.5 w-16 bg-[#233348] rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 w-[92%]"></div>
+</div>
+<span class="text-xs text-text-secondary font-medium">Health: 92%</span>
+</div>
+</div>
+</article>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-6 right-6 z-40">
+<button class="group flex items-center justify-center size-14 rounded-2xl bg-primary text-white shadow-xl shadow-primary/30 hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300">add</span>
+</button>
+</div>
+<!-- Simulated "Bottom Sheet" overlay hint (partially visible) -->
+<!-- This represents the beginning of the "Client Drawer" interaction -->
+<div class="fixed inset-x-0 bottom-0 z-50 transform translate-y-full transition-transform duration-300 pointer-events-none">
+<div class="bg-[#1C2632] rounded-t-2xl p-6 shadow-[0_-8px_30px_rgba(0,0,0,0.5)] border-t border-[#233348] h-[80vh]">
+<div class="w-12 h-1.5 bg-[#233348] rounded-full mx-auto mb-6"></div>
+<h2 class="text-2xl text-white font-bold mb-4">Client Drawer</h2>
+</div>
+</div>
+</div>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</body></html>

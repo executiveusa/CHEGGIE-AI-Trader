@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved Analyses - FinanceApp</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111822",
+                        "surface-dark": "#1e2832",
+                        "accent-teal": "#2c7a7b",
+                        "accent-neutral": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit to match the dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111822; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233348; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #344863; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased selection:bg-primary/30 selection:text-white">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-solid border-slate-200 dark:border-[#233348] bg-white/95 dark:bg-[#111822]/95 backdrop-blur-sm px-6 py-4 lg:px-10">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">FinanceApp</h2>
+</div>
+<div class="flex items-center gap-3">
+<!-- Language Toggle -->
+<div class="hidden md:flex items-center rounded-lg bg-slate-100 dark:bg-[#233348] p-1">
+<button class="px-3 py-1.5 rounded-md text-xs font-bold bg-white dark:bg-[#111822] text-slate-900 dark:text-white shadow-sm transition-all">EN</button>
+<button class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">ES-MX 🇲🇽</button>
+<button class="px-3 py-1.5 rounded-md text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">SR</button>
+</div>
+<!-- Theme Toggle -->
+<button class="flex size-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-[#233348] text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-[#344863] transition-colors">
+<span class="material-symbols-outlined">light_mode</span>
+</button>
+<!-- User Profile -->
+<div class="ml-2 size-10 rounded-full bg-gradient-to-tr from-primary to-purple-500 p-[2px] cursor-pointer">
+<div class="size-full rounded-full bg-slate-100 dark:bg-[#111822] flex items-center justify-center">
+<span class="font-bold text-xs">JD</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<main class="flex-1 flex flex-col items-center py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
+<div class="w-full max-w-7xl flex flex-col gap-8">
+<!-- Page Header & Intro -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div class="flex flex-col gap-2 max-w-2xl">
+<h1 class="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">
+                            Saved Analyses
+                        </h1>
+<p class="text-lg text-slate-500 dark:text-[#92a9c9] leading-relaxed">
+                            Access your curated library of financial scenarios, market projections, and portfolio simulations.
+                        </p>
+</div>
+<!-- Primary Action (New Analysis) -->
+<button class="hidden md:flex items-center gap-2 bg-primary hover:bg-blue-600 text-white px-5 py-3 rounded-lg font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-primary/25">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>New Analysis</span>
+</button>
+</div>
+<!-- Controls: Search & Filter -->
+<div class="sticky top-[80px] z-40 -mx-4 px-4 py-4 md:static md:mx-0 md:px-0 md:py-0 bg-background-light/95 dark:bg-background-dark/95 md:bg-transparent md:dark:bg-transparent backdrop-blur-md md:backdrop-blur-none">
+<div class="flex flex-col lg:flex-row gap-4 lg:items-center justify-between">
+<!-- Search Bar -->
+<div class="relative w-full lg:max-w-md group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 dark:text-[#92a9c9]">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 rounded-lg border-0 bg-white dark:bg-[#233348] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#92a9c9] focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-[#2a3e57] transition-all shadow-sm font-medium" placeholder="Search by name, tag, or asset class..." type="text"/>
+</div>
+<!-- Filters/Chips -->
+<div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm whitespace-nowrap shadow-sm">
+                                All Views
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#233348] text-slate-600 dark:text-[#92a9c9] hover:bg-slate-50 dark:hover:bg-[#2f4560] font-medium text-sm border border-slate-200 dark:border-transparent whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+                                Stocks
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#233348] text-slate-600 dark:text-[#92a9c9] hover:bg-slate-50 dark:hover:bg-[#2f4560] font-medium text-sm border border-slate-200 dark:border-transparent whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[18px]">currency_bitcoin</span>
+                                Crypto
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#233348] text-slate-600 dark:text-[#92a9c9] hover:bg-slate-50 dark:hover:bg-[#2f4560] font-medium text-sm border border-slate-200 dark:border-transparent whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[18px]">apartment</span>
+                                Real Estate
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-[#233348] text-slate-600 dark:text-[#92a9c9] hover:bg-slate-50 dark:hover:bg-[#2f4560] font-medium text-sm border border-slate-200 dark:border-transparent whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[18px]">savings</span>
+                                Retirement
+                            </button>
+</div>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<!-- Image Area -->
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Abstract golden candlestick chart pattern" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Abstract golden candlestick chart pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPQDKOfSdp3rFMT1LpUz1nrZIfAYvt9vr2ZG4MmC6WhhpCpqs5OfcXQdtJ2ct_esvePQM_Fl2HbZpbdNcG1kREHu969xKH6P8fQzm1KWNO-zgwE1F6jCL7YM0Cp1BOc0_twTPxhR300ki4eCLwcCu9PeTtdQIPL6EQpshj7tBAWqJ-OvlrLKzq4AzqlQPl71cU_q2HEOGwLP46jTwrN0B9pzn3LPCFmX_HhaOaHQT6LF4RJEQSsMIgsZry0HEvkRInsVggxMls1lU"/>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Retirement
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Content Area -->
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Retirement 2045 Plan</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved Oct 12 • Aggressive Strategy</p>
+<!-- Instrument Data -->
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Proj. ROI</p>
+<p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">+8.4%</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Risk Score</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">7/10</span>
+<span class="material-symbols-outlined text-orange-400 text-sm">warning</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Footer (Reveals on Hover mostly visually, fully clickable area) -->
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 2 days ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Digital currency blockchain network visualization" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Digital currency blockchain network visualization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkoKSwViNxCK7kP0YFQvo4OSbRIQVKNHpC7pWuGRnraKRxLsaf8u-hl8Kp1VuXvkeLMyl_BTtjSlxorwOvcAm57m3epVzubl489BfeZKDNOrktang7AbzfpK6z1PNsR4pJS32HDIJX6_iie3ntxEnvOKSHhxCq02Maq_C_Jbmq6RyImXzv1z937kuS3HtJP6lnZvCySSOqFNVlxRT9a-G_J48SXgyFpVaM6ZzmWTxmgvnCEHiNFQ1Um-piBRAAIKCloXhCLz0SVDY"/>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Crypto
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">ETH / SOL Staking</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved Sept 28 • High Volatility</p>
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Yield APY</p>
+<p class="text-lg font-bold text-primary">+14.2%</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Risk Score</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">9/10</span>
+<span class="material-symbols-outlined text-red-500 text-sm">local_fire_department</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 1 week ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Modern architectural building facade low angle" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern architectural building facade low angle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz3vx2mtt8t4C4TGTs0hBvuo478mCcukP86eRs2e5KXr-87Imxt7uluYwuWMPPLYoC9T9HhHgNpKIm5eCqLjNG4lqdJGqVH83gERRpz3RsLakQk1Pv3LIbkg90gZF948E4_pMXbRFv3w9QuCj9WhdFb0BYz4OBaPoKEP9Ss01uG1UFrlwdNND5g3GaLH_UKsIjuOr2tTc5WMJsRI3iTvrbeYn5he9x6PLiJmMl5NbTVk7JXsv18rqZKASWzuV3LheHQ-zLNHPVBKo"/>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Real Estate
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Rental Properties Mix</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved Aug 04 • Conservative</p>
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Cap Rate</p>
+<p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">6.1%</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Risk Score</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">3/10</span>
+<span class="material-symbols-outlined text-green-500 text-sm">shield</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 1 month ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="relative h-48 overflow-hidden bg-slate-100 dark:bg-[#151c24] flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<!-- Minimal graphic placeholder instead of photo -->
+<div class="w-full h-full opacity-30" style="background-image: radial-gradient(#344863 1px, transparent 1px); background-size: 20px 20px;"></div>
+<span class="material-symbols-outlined absolute text-6xl text-slate-300 dark:text-[#2a3e57]">account_balance</span>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Bonds
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Safe Harbor Bonds</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved July 15 • Low Risk</p>
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Fixed Yield</p>
+<p class="text-lg font-bold text-slate-700 dark:text-slate-200">4.2%</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Risk Score</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">1/10</span>
+<span class="material-symbols-outlined text-blue-400 text-sm">verified_user</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 2 months ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Abstract colorful data dashboard visualization" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Abstract colorful data dashboard visualization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPear9AMlF-q8g-ybcQRguN8OSSUaG9mUxsl-SNIZhp6kc07XtcqDpYHezd5NYJnIBvH4D92mVNQWeKPTwAZSMBmeDaspSq8pe_iZuHrP4ugcDyVFK4ZipfjDKSbiYvP3Bjx3qEmM31jSMvH4TlsuMk0ZFbDtEKxKqwsU4G3cezwtnlQ4J0syP39UZuCzohwRtq9QZIZ-z8Ngm02jos0j-6NNaXfQBudPBjlBW-4DoWolLFJEbIfOfPQYG38yB3W6PHSWLNdYO-d0"/>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Analytics
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">Q4 Growth Projection</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved June 02 • Market Analysis</p>
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Forecast</p>
+<p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">Bullish</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Confidence</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">85%</span>
+<span class="material-symbols-outlined text-purple-400 text-sm">psychology</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 3 months ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group relative flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#1e2832] border border-slate-200 dark:border-[#2b3a4a] hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="relative h-48 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1e2832] via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Diverse group of friends hanging out together" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0 transition-all" data-alt="Diverse group of friends representing community" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXrILv9A6ki7YymJsBW07wncizicyRmlaRQstmEMCpsarXRkovwrBceai-Usllh0koN0XoaXyHdSo0sjiKB2UlaV2IatkmdIhgceyrK1XIWROgQZdSTrJKButfrc2HKKM4Aa20eyhCRfHmBHjYJwSxLYA8QrabefgrYOxcKEs2iQ1EAowfb3HWabvA8bmQeTdyDT0W3bZycBf2iYdocaNN1UKiZR_TPLXZ1GkJH-RUYeyPGFqzH_l7aP9EWcX6ihkLghosKnYhD3o"/>
+<div class="absolute top-3 left-3 z-20">
+<span class="inline-flex items-center rounded bg-black/50 backdrop-blur-md px-2 py-1 text-xs font-bold text-white border border-white/10">
+                                    Education
+                                </span>
+</div>
+<div class="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="rounded-full bg-white/10 p-1.5 text-white backdrop-blur-md hover:bg-white/20">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">College Fund 2035</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-[#92a9c9] mb-4">Saved May 21 • Target Date</p>
+<div class="mt-auto grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-[#2b3a4a] pt-4">
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Goal Progress</p>
+<p class="text-lg font-bold text-primary">32%</p>
+</div>
+<div>
+<p class="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status</p>
+<div class="flex items-center gap-1">
+<span class="text-lg font-bold text-slate-900 dark:text-white">On Track</span>
+<span class="material-symbols-outlined text-emerald-500 text-sm">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-[#182029] px-5 py-3 flex justify-between items-center">
+<span class="text-xs font-medium text-slate-400">Last edited 4 months ago</span>
+<span class="flex items-center gap-1 text-sm font-bold text-primary group-hover:underline cursor-pointer">
+                                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Footer Pagination -->
+<div class="flex justify-center mt-8">
+<nav class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#233348] transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-9 rounded-lg bg-primary text-white font-bold text-sm">1</button>
+<button class="size-9 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#233348] font-medium text-sm transition-colors">2</button>
+<button class="size-9 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#233348] font-medium text-sm transition-colors">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="size-9 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#233348] font-medium text-sm transition-colors">8</button>
+<button class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#233348] transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="border-t border-slate-200 dark:border-[#233348] py-8 text-center text-sm text-slate-500 dark:text-[#92a9c9]">
+<p>© 2024 FinanceApp Inc. All rights reserved.</p>
+</footer>
+</div>
+<!-- Mobile Action FAB -->
+<div class="fixed bottom-6 right-6 md:hidden z-50">
+<button class="size-14 rounded-full bg-primary text-white shadow-xl flex items-center justify-center hover:bg-blue-600 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</div>
+</body></html>

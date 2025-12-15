@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CheggieSiteSpec version="1.0.0" lastUpdated="2025-12-14">
+  
+  <Site>
+    <Name>Cheggie Lifestyle Finance</Name>
+    <URL>https://cheggie-lifestyle-finance.lovable.app</URL>
+    <Type>personal-brand</Type>
+    <Stack>
+      <Framework>Vite + React 18</Framework>
+      <Language>TypeScript</Language>
+      <Styling>Tailwind CSS + shadcn/ui</Styling>
+      <State>TanStack Query</State>
+      <Routing>React Router v6</Routing>
+      <I18n>react-i18next</I18n>
+      <Animation>Framer Motion</Animation>
+      <Backend>Supabase</Backend>
+    </Stack>
+  </Site>
+
+  <Languages>
+    <Language code="sr-Latn" default="false">
+      <Name>Srpski (latinica)</Name>
+      <Flag>🇷🇸</Flag>
+      <Direction>ltr</Direction>
+      <Script>Latin</Script>
+      <Fallback>en</Fallback>
+    </Language>
+    <Language code="en" default="true">
+      <Name>English</Name>
+      <Flag>🇬🇧</Flag>
+      <Direction>ltr</Direction>
+      <Script>Latin</Script>
+    </Language>
+    <Language code="es-MX" default="false">
+      <Name>Español (MX)</Name>
+      <Flag>🇲🇽</Flag>
+      <Direction>ltr</Direction>
+      <Script>Latin</Script>
+      <Fallback>en</Fallback>
+    </Language>
+  </Languages>
+
+  <Routes>
+    <PublicRoutes>
+      <Route path="/" component="Index" agid="page-home" />
+      <Route path="/language" component="LanguageSelection" agid="page-language" />
+      <Route path="/auth" component="Auth" agid="page-auth" />
+    </PublicRoutes>
+    <ProtectedRoutes>
+      <Route path="/dashboard" component="Dashboard" agid="page-dashboard" />
+      <Route path="/agents" component="AgentsConsole" agid="page-agents" />
+    </ProtectedRoutes>
+    <AdminRoutes>
+      <Route path="/admin" component="AdminLogin" agid="page-admin-login" />
+      <Route path="/admin/assistant" component="AdminAssistant" agid="page-admin-assistant" />
+      <Route path="/admin/agents" component="AdminAgents" agid="page-admin-agents" />
+    </AdminRoutes>
+  </Routes>
+
+  <Sections page="home">
+    <Section id="hero" agid="home-hero" type="full-viewport" voice="first-person">
+      <Title>Hero Section</Title>
+      <Animation type="split-text-reveal" duration="800ms" easing="outExpo" />
+    </Section>
+    <Section id="tracking" agid="section-tracking" type="snapshot">
+      <Title>What I'm Tracking Now</Title>
+      <Animation type="fade-up-stagger" duration="600ms" staggerDelay="100ms" />
+    </Section>
+    <Section id="insights" agid="section-insights" type="grid">
+      <Title>Selected Insights</Title>
+      <Animation type="reveal-stagger" duration="600ms" staggerDelay="100ms" />
+    </Section>
+    <Section id="about" agid="section-about" type="two-column">
+      <Title>About Me</Title>
+      <Animation type="fade-up" duration="600ms" />
+    </Section>
+    <Section id="cta" agid="section-cta" type="banner">
+      <Title>Call to Action</Title>
+      <Animation type="scale-up" duration="400ms" />
+    </Section>
+  </Sections>
+
+  <Sections page="dashboard">
+    <Tile id="market-pulse" agid="tile-market-pulse" span="col-span-8 row-span-2">
+      <Title>Market Pulse</Title>
+      <Priority>P1</Priority>
+    </Tile>
+    <Tile id="watchlist" agid="tile-watchlist" span="col-span-4">
+      <Title>Watchlist</Title>
+      <Priority>P1</Priority>
+    </Tile>
+    <Tile id="brief" agid="tile-brief" span="col-span-4">
+      <Title>Daily Brief</Title>
+      <Priority>P2</Priority>
+    </Tile>
+    <Tile id="notes" agid="tile-notes" span="col-span-6">
+      <Title>Notes</Title>
+      <Priority>P2</Priority>
+    </Tile>
+    <Tile id="actions" agid="tile-actions" span="col-span-6">
+      <Title>Quick Actions</Title>
+      <Priority>P1</Priority>
+    </Tile>
+  </Sections>
+
+  <Navigation>
+    <Primary agid="nav-primary">
+      <Items>
+        <Item key="dashboard" href="/dashboard" protected="true" />
+        <Item key="tracking" href="#tracking" scroll="true" />
+        <Item key="insights" href="#insights" scroll="true" />
+        <Item key="about" href="#about" scroll="true" />
+      </Items>
+      <Actions>
+        <Action key="login" href="/auth" variant="ghost" />
+        <Action key="signup" href="/auth" variant="primary" />
+      </Actions>
+    </Primary>
+    <Footer agid="footer-main">
+      <Column title="Navigation">
+        <Link>tracking</Link>
+        <Link>insights</Link>
+        <Link>about</Link>
+      </Column>
+      <Column title="Resources">
+        <Link>docs</Link>
+        <Link>status</Link>
+        <Link>api</Link>
+      </Column>
+      <Column title="Legal">
+        <Link>privacy</Link>
+        <Link>terms</Link>
+        <Link>security</Link>
+      </Column>
+    </Footer>
+  </Navigation>
+
+  <Motion>
+    <Durations>
+      <Duration name="instant" ms="100" />
+      <Duration name="fast" ms="200" />
+      <Duration name="normal" ms="400" />
+      <Duration name="entering" ms="500" />
+      <Duration name="slow" ms="800" />
+      <Duration name="glacial" ms="1200" />
+    </Durations>
+    <Easings>
+      <Easing name="outExpo" bezier="0.16, 1, 0.3, 1" />
+      <Easing name="inOutExpo" bezier="0.87, 0, 0.13, 1" />
+      <Easing name="spring" bezier="0.22, 1.2, 0.36, 1" />
+    </Easings>
+    <Patterns>
+      <Pattern name="fadeUp">
+        <Initial opacity="0" y="20" />
+        <Animate opacity="1" y="0" />
+        <Transition duration="500" easing="outExpo" />
+      </Pattern>
+      <Pattern name="reveal">
+        <Initial opacity="0" y="40" />
+        <Animate opacity="1" y="0" />
+        <Transition duration="600" easing="outExpo" />
+        <Trigger>inView</Trigger>
+      </Pattern>
+      <Pattern name="stagger">
+        <StaggerChildren delay="100" />
+        <DelayChildren delay="200" />
+      </Pattern>
+    </Patterns>
+    <ReducedMotion>
+      <Query>prefers-reduced-motion: reduce</Query>
+      <Behavior>Skip all animations</Behavior>
+    </ReducedMotion>
+  </Motion>
+
+  <Components>
+    <Component name="MagneticButton">
+      <File>src/components/ui/magnetic-button.tsx</File>
+      <Props>
+        <Prop name="children" type="ReactNode" required="true" />
+        <Prop name="strength" type="number" default="0.3" />
+        <Prop name="asChild" type="boolean" default="false" />
+      </Props>
+    </Component>
+    <Component name="AnimatedNumber">
+      <File>src/components/ui/animated-number.tsx</File>
+      <Props>
+        <Prop name="value" type="number" required="true" />
+        <Prop name="suffix" type="string" default="" />
+        <Prop name="duration" type="number" default="2000" />
+      </Props>
+    </Component>
+    <Component name="Reveal">
+      <File>src/components/ui/reveal.tsx</File>
+      <Props>
+        <Prop name="children" type="ReactNode" required="true" />
+        <Prop name="delay" type="number" default="0" />
+        <Prop name="direction" type="string" default="up" />
+      </Props>
+    </Component>
+  </Components>
+
+  <StitchAssets basePath="public/stitch_language_selection/stitch_language_selection">
+    <Asset name="language_selection" path="language_selection/screen.png">
+      <Usage>LanguageSelection component</Usage>
+    </Asset>
+    <Asset name="public_homepage_hero" path="public_homepage_hero/screen.png">
+      <Usage>HeroPersonal component</Usage>
+    </Asset>
+    <Asset name="home_page_1" path="home_page_1/screen.png">
+      <Usage>Landing layout reference</Usage>
+    </Asset>
+    <Asset name="user_dashboard" path="user_dashboard/screen.png">
+      <Usage>Dashboard bento grid</Usage>
+    </Asset>
+    <Asset name="advisor_dashboard" path="advisor_client_dashboard/screen.png">
+      <Usage>Admin/advisor view</Usage>
+    </Asset>
+  </StitchAssets>
+
+  <RemovedFromPublic>
+    <Section>pricing</Section>
+    <Section>testimonials</Section>
+  </RemovedFromPublic>
+
+  <QAChecklist>
+    <Check id="nav-works">Navigation anchors scroll to sections</Check>
+    <Check id="lang-toggle">Language toggle changes all text</Check>
+    <Check id="serbian-latin">Serbian shows as Srpski (latinica)</Check>
+    <Check id="spanish-mx">Spanish shows as Español (MX) with 🇲🇽</Check>
+    <Check id="pricing-removed">Pricing section not on public landing</Check>
+    <Check id="dashboard-private">Dashboard requires authentication</Check>
+    <Check id="reduced-motion">Animations respect prefers-reduced-motion</Check>
+    <Check id="a11y-contrast">Color contrast passes WCAG AA</Check>
+  </QAChecklist>
+
+  <JobCompleteChecklist>
+    <Item status="pending">Navbar works (scroll + route)</Item>
+    <Item status="pending">Language toggle works and is fully translated</Item>
+    <Item status="pending">Serbian is Latin (sr-Latn)</Item>
+    <Item status="pending">Spanish is Mexican Spanish + 🇲🇽</Item>
+    <Item status="pending">Pricing removed from public landing</Item>
+    <Item status="pending">Dashboard is primary private focus</Item>
+  </JobCompleteChecklist>
+
+</CheggieSiteSpec>

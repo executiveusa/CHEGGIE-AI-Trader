@@ -1,700 +1,401 @@
-import { useEffect } from 'react';
-import { useMemo } from 'react';
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdminAuth } from '@/context/AdminAuthContext';
-import { FinancialDashboard } from '@/components/FinancialDashboard';
-import {
-  ArrowDownRight,
-  ArrowRight,
-  ArrowUpRight,
-  Bot,
-  Building2,
-  CreditCard,
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { 
+  TrendingUp, 
+  Eye, 
+  FileText, 
+  Zap, 
+  StickyNote, 
   ExternalLink,
-  GraduationCap,
-  Network,
-  ShieldCheck,
-  Sparkles,
-  TrendingUp,
+  Plus,
+  RefreshCw,
+  ArrowUpRight,
+  ArrowDownRight,
+  Radio,
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  Rocket,
+  CreditCard,
+  BrainCircuit
 } from 'lucide-react';
-import { fetchDashboardData, DashboardData } from '@/lib/dashboard-data';
 import { Navigation } from '@/components/Navigation';
+import { GlassCard, StatsCard } from '@/components/ui/glass-card';
+import { Reveal, StaggerContainer, StaggerItem } from '@/components/ui/reveal';
+import { AnimatedNumber, AnimatedPercentage, AnimatedCurrency } from '@/components/ui/animated-number';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useAdminAuth } from '@/context/AdminAuthContext';
+import { useQuery } from '@tanstack/react-query';
+import { RubeAgentPanel } from '@/components/dashboard/RubeAgentPanel';
 
-const formatValue = (value: number, format: 'currency' | 'percentage' | 'count') => {
-  if (format === 'currency') {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(value);
-  }
-  if (format === 'percentage') {
-    return `${value.toFixed(0)}%`;
-  }
-  return new Intl.NumberFormat('en-US').format(value);
+// Mock data fetcher
+const fetchDashboardData = async () => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+  
+  return {
+    marketPulse: {
+      signals: [
+        { id: 1, asset: 'BTC', signal: 'STRONG BUY', confidence: 87, price: 97245.00, change: 3.2 },
+        { id: 2, asset: 'ETH', signal: 'HOLD', confidence: 65, price: 3890.00, change: -0.8 },
+        { id: 3, asset: 'SOL', signal: 'BUY', confidence: 72, price: 245.00, change: 5.4 },
+      ],
+      totalSignals: 3,
+    },
+    watchlist: [
+      { symbol: 'AAPL', name: 'Apple Inc.', price: 195.50, change: 1.2 },
+      { symbol: 'TSLA', name: 'Tesla Inc.', price: 248.30, change: -2.1 },
+      { symbol: 'NVDA', name: 'NVIDIA Corp.', price: 145.20, change: 4.5 },
+      { symbol: 'MSFT', name: 'Microsoft', price: 425.80, change: 0.8 },
+      { symbol: 'AMZN', name: 'Amazon', price: 195.20, change: 1.5 },
+    ],
+    brief: {
+      summary: 'Markets showing strength with tech leading gains. Bitcoin continues rally toward $100K. Key earnings this week from major tech companies.',
+      events: [
+        'Fed rate decision Wednesday',
+        'NVDA earnings Thursday',
+        'CPI data Friday',
+      ],
+      generated: '8:00 AM',
+    },
+    notes: [
+      { id: 1, text: 'Research emerging markets ETFs', time: '2h ago' },
+      { id: 2, text: 'Update stop-loss on BTC position', time: '5h ago' },
+      { id: 3, text: 'Review Q4 portfolio allocation', time: '1d ago' },
+    ],
+    stats: {
+      portfolioValue: 145230,
+      weeklyChange: 2.4,
+      monthlyChange: 8.7,
+      ytdChange: 34.2,
+    },
+  };
 };
-
-const statusBadgeVariant: Record<DashboardData['workflows'][number]['status'], string> = {
-  queued: 'secondary',
-  running: 'default',
-  completed: 'success',
-};
-
-const statusCopy: Record<DashboardData['workflows'][number]['status'], string> = {
-  queued: 'Queued',
-  running: 'In progress',
-  completed: 'Completed',
-};
-
-const chartConfig = {
-  recurring: {
-    label: 'Recurring revenue',
-    color: 'var(--chart-1)',
-  },
-  affiliates: {
-    label: 'Affiliate revenue',
-    color: 'var(--chart-2)',
-  },
-} as const;
-
-const quickActions = [
-  {
-    label: 'Launch OpenRouter workflow',
-    description: 'Trigger a multi-agent research sprint in OpenRouter.',
-    href: 'https://openrouter.ai',
-    icon: Bot,
-  },
-  {
-    label: 'Sync Lovable Cloud data',
-    description: 'Review latest Lovable Cloud audit and API metrics.',
-    href: 'https://docs.lovable.dev/',
-    icon: Network,
-  },
-  {
-    label: 'Manage Stripe billing',
-    description: 'Update subscriptions and verify payouts in Stripe.',
-    href: 'https://dashboard.stripe.com/',
-    icon: CreditCard,
-  },
-];
-
-const referenceLinks = [
-  {
-    label: 'Bitcoin policy for Serbia (NBS)',
-    href: 'https://nbs.rs/sr/finansijske-usluge/kripto-imovina/'
-  },
-  {
-    label: 'European AI compliance playbook',
-    href: 'https://digital-strategy.ec.europa.eu/en/policies/eu-ai-act'
-  },
-  {
-    label: 'Global fintech benchmarking by World Bank',
-    href: 'https://www.worldbank.org/en/topic/fintech'
-  },
-];
-
-const DashboardSkeleton = () => (
-  <div className="container mx-auto px-4 pt-32 pb-16 space-y-6">
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <Card key={index} className="border-0 shadow-sm">
-          <CardHeader>
-            <Skeleton className="h-4 w-32" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-10 w-24" />
-            <Skeleton className="mt-4 h-4 w-20" />
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-    <Card className="border-0 shadow-sm">
-      <CardHeader>
-        <Skeleton className="h-5 w-48" />
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="h-64 w-full" />
-      </CardContent>
-    </Card>
-  </div>
-);
 
 const Dashboard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user: adminUser, loading: authLoading } = useAdminAuth();
-  const [dashboardMode, setDashboardMode] = useState<'trading' | 'business'>('trading');
+  const { user: authUser, loading: authLoading } = useAdminAuth();
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!authLoading && !adminUser) {
-      navigate('/auth', { replace: true });
-    }
-  }, [adminUser, authLoading, navigate]);
+  // Get user from context or localStorage (for demo mode)
+  const storedSession = localStorage.getItem('cheggie-admin-session-v1');
+  const user = authUser || (storedSession ? JSON.parse(storedSession) : null);
 
-  // Show loading state while checking auth
-  if (authLoading) {
-    return <DashboardSkeleton />;
-  }
-
-  // Don't render dashboard if not authenticated
-  if (!adminUser) {
-    return null;
-  }
-
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['dashboard-data'],
     queryFn: fetchDashboardData,
+    refetchInterval: 60000, // Refetch every minute
   });
 
-  const totals = useMemo(() => {
-    if (!data) return null;
-    const bitcoinTransfer = data.transfers.find((transfer) => transfer.network.includes('Bitcoin'));
-    return {
-      assets: data.metrics.find((metric) => metric.id === 'assets'),
-      affiliate: data.metrics.find((metric) => metric.id === 'affiliate'),
-      bitcoinTransfer,
-    };
-  }, [data]);
+  // Show loading state
+  if (authLoading || isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950">
+        <Navigation />
+        <div className="container mx-auto px-4 pt-24 pb-16">
+          <DashboardSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className="min-h-screen bg-slate-950" data-agid="page-dashboard">
       <Navigation />
       
-      {/* Dashboard Mode Switcher */}
-      <div className="fixed top-24 right-4 z-40 flex gap-2">
-        <button
-          onClick={() => setDashboardMode('trading')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            dashboardMode === 'trading'
-              ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Trading Dashboard
-        </button>
-        <button
-          onClick={() => setDashboardMode('business')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            dashboardMode === 'business'
-              ? 'bg-blue-600 text-white shadow-lg'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Business Dashboard
-        </button>
-      </div>
-
-      {/* Trading Dashboard */}
-      {dashboardMode === 'trading' && (
-        <div className="container mx-auto px-4 pt-32 pb-16">
-          <FinancialDashboard />
-        </div>
-      )}
-
-      {/* Business Dashboard */}
-      {dashboardMode === 'business' && (
-        <>
-          {isLoading && <DashboardSkeleton />}
-          {!isLoading && data && (
-            <div className="container mx-auto px-4 pt-32 pb-16 space-y-10">
-          <header className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-3">
-              <Badge variant="outline" className="w-fit border-primary text-primary">
-                {t('dashboard.welcome')} · {data.user.name}
-              </Badge>
-              <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+      <main className="container mx-auto px-4 pt-24 pb-16">
+        {/* Header */}
+        <Reveal className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <p className="text-slate-400 text-sm mb-1">
+                {t('dashboard.welcome')} · {user?.email || 'Demo User'}
+              </p>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">
                 {t('dashboard.title')}
               </h1>
-              <p className="max-w-2xl text-muted-foreground">
-                Track assets, affiliate momentum, Bitcoin transfers, and multilingual workflows in one trusted dashboard.
-                Every module follows Steve Krug's “don’t make me think” principle with clear next steps.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Button size="lg" className="bg-gradient-primary shadow-glow" asChild>
-                  <a href="https://lovable.dev" target="_blank" rel="noreferrer">
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Launch Lovable Cloud Console
-                  </a>
-                </Button>
-                <Button size="lg" variant="outline" className="border-primary/40" asChild>
-                  <a href="https://portal.openrouter.ai" target="_blank" rel="noreferrer">
-                    OpenRouter Tasks
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Last synchronized: {data.user.lastLogin} ({data.user.locale})
-              </p>
             </div>
-            <Card className="border-0 bg-gradient-to-br from-primary/90 to-primary/60 text-primary-foreground shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base font-medium">
-                  <ShieldCheck className="h-5 w-5" /> Compliance snapshot
-                </CardTitle>
-                <CardDescription className="text-primary-foreground/80">
-                  Real-time sync with Lovable Cloud audit center
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {data.compliance.map((event) => (
-                  <a
-                    key={event.id}
-                    href={event.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-start gap-3 rounded-lg bg-primary/20 p-3 transition hover:bg-primary/30"
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="border-white/10 text-white hover:bg-white/5"
+                onClick={() => refetch()}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Rube Agent Panel - AI Automation */}
+        <Reveal delay={0.1} className="mb-8">
+          <RubeAgentPanel />
+        </Reveal>
+
+        {/* Stats Row */}
+        <Reveal delay={0.15} className="mb-8">
+          <div className="grid gap-4 md:grid-cols-4">
+            <StatsCard
+              icon={<TrendingUp className="h-5 w-5" />}
+              title="Portfolio Value"
+              value={<AnimatedCurrency value={data?.stats.portfolioValue || 0} />}
+              subtitle={<AnimatedPercentage value={data?.stats.weeklyChange || 0} showSign colorCode />}
+              trend={data?.stats.weeklyChange && data.stats.weeklyChange > 0 ? 'up' : 'down'}
+            />
+            <StatsCard
+              icon={<Zap className="h-5 w-5" />}
+              title="Active Signals"
+              value={<AnimatedNumber value={data?.marketPulse.totalSignals || 0} />}
+              subtitle="AI-generated"
+              trend="neutral"
+            />
+            <StatsCard
+              icon={<Eye className="h-5 w-5" />}
+              title="Watchlist"
+              value={<AnimatedNumber value={data?.watchlist.length || 0} />}
+              subtitle="Assets tracked"
+              trend="neutral"
+            />
+            <StatsCard
+              icon={<StickyNote className="h-5 w-5" />}
+              title="Notes"
+              value={<AnimatedNumber value={data?.notes.length || 0} />}
+              subtitle="Active reminders"
+              trend="neutral"
+            />
+          </div>
+        </Reveal>
+
+        {/* Bento Grid */}
+        <div className="grid gap-6 lg:grid-cols-12" data-agid="dashboard-grid">
+          {/* Market Pulse - Large Tile */}
+          <Reveal delay={0.2} className="lg:col-span-8 lg:row-span-2">
+            <GlassCard className="h-full" data-agid="tile-market-pulse">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white">{t('dashboard.marketPulse')}</h2>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-emerald-400">
+                  <Radio className="h-3 w-3 animate-pulse" />
+                  Live
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {data?.marketPulse.signals.map((signal, index) => (
+                  <motion.div
+                    key={signal.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-background/80">
-                      <ShieldCheck className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium leading-tight text-primary-foreground">
-                        {event.label}
-                      </p>
-                      <p className="text-xs text-primary-foreground/80">{event.timestamp}</p>
-                    </div>
-                    <ExternalLink className="ml-auto h-4 w-4 text-primary-foreground/70" />
-                  </a>
-                ))}
-              </CardContent>
-            </Card>
-          </header>
-
-          <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {data.metrics.map((metric) => {
-              const isPositive = metric.delta >= 0;
-              const Icon = isPositive ? ArrowUpRight : ArrowDownRight;
-              return (
-                <Card key={metric.id} className="border-0 shadow-md">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      {metric.label}
-                    </CardTitle>
-                    <Badge variant="secondary" className="gap-1">
-                      <Icon className={`h-4 w-4 ${isPositive ? 'text-emerald-500' : 'text-red-500'}`} />
-                      <span className={isPositive ? 'text-emerald-600' : 'text-red-600'}>
-                        {isPositive ? '+' : ''}
-                        {metric.delta}%
-                      </span>
-                    </Badge>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-semibold text-foreground">
-                      {formatValue(metric.value, metric.format)}
-                    </div>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Rolling 30-day trend powered by Cheggie AI playbooks.
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </section>
-
-          <section className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-            <Card className="border-0 shadow-md">
-              <CardHeader className="space-y-1">
-                <CardTitle className="text-lg font-semibold">Revenue momentum</CardTitle>
-                <CardDescription>Recurring and affiliate revenue across the last six months.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-[320px]">
-                  <AreaChart data={data.revenue}>
-                    <defs>
-                      <linearGradient id="fill-recurring" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.05} />
-                      </linearGradient>
-                      <linearGradient id="fill-affiliates" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="5%" stopColor="var(--chart-2)" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="var(--chart-2)" stopOpacity={0.05} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="4 4" strokeOpacity={0.2} />
-                    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                    <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `$${value / 1000}k`} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Area
-                      type="monotone"
-                      dataKey="recurring"
-                      stroke="var(--chart-1)"
-                      fill="url(#fill-recurring)"
-                      strokeWidth={2}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="affiliates"
-                      stroke="var(--chart-2)"
-                      fill="url(#fill-affiliates)"
-                      strokeWidth={2}
-                    />
-                  </AreaChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">AI trade signals</CardTitle>
-                <CardDescription>Generated by OpenRouter agents with Lovable Cloud validation.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {data.signals.map((signal) => (
-                  <div key={signal.asset} className="rounded-lg border bg-card p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">{signal.asset}</p>
-                        <p className="text-lg font-semibold text-foreground">{signal.action}</p>
-                      </div>
-                      <Badge className="bg-primary/10 text-primary">
-                        {signal.horizon}
+                    <div className="flex items-center gap-4">
+                      <div className="text-2xl font-bold text-white">{signal.asset}</div>
+                      <Badge className={
+                        signal.signal.includes('BUY') ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                        signal.signal.includes('SELL') ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+                        'bg-slate-500/20 text-slate-400 border-slate-500/30'
+                      }>
+                        {signal.signal}
                       </Badge>
                     </div>
-                    <div className="mt-4 space-y-2">
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>Confidence</span>
-                        <span>{signal.confidence}%</span>
+                    <div className="text-right">
+                      <div className="text-lg font-semibold text-white">
+                        ${signal.price.toLocaleString()}
                       </div>
-                      <Progress value={signal.confidence} className="h-2" />
+                      <div className={`flex items-center gap-1 text-sm ${signal.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {signal.change >= 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                        {signal.change >= 0 ? '+' : ''}{signal.change}%
+                      </div>
                     </div>
-                  </div>
+                    <div className="text-right">
+                      <div className="text-xs text-slate-500">Confidence</div>
+                      <div className="text-lg font-semibold text-white">{signal.confidence}%</div>
+                      <div className="w-24 h-1.5 bg-slate-700 rounded-full overflow-hidden mt-1">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${signal.confidence}%` }}
+                          transition={{ delay: 0.5 + index * 0.1, duration: 0.8 }}
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
                 ))}
-                {totals?.bitcoinTransfer && (
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={totals.bitcoinTransfer.link} target="_blank" rel="noreferrer">
-                      <Network className="mr-2 h-4 w-4" />
-                      View Bitcoin transfer proof
-                    </a>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </section>
+              </div>
+            </GlassCard>
+          </Reveal>
 
-          <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-            <Card className="border-0 shadow-md">
-              <CardHeader className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                  <CardTitle className="text-lg font-semibold">Active workflows</CardTitle>
-                  <CardDescription>Focus on the next best action with status-aware AI automations.</CardDescription>
+          {/* Watchlist - Medium Tile */}
+          <Reveal delay={0.3} className="lg:col-span-4">
+            <GlassCard data-agid="tile-watchlist">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-blue-400" />
+                  <h3 className="font-semibold text-white">{t('dashboard.watchlist')}</h3>
                 </div>
-                <Button variant="outline" asChild>
-                  <a href="https://portal.openrouter.ai/workflows" target="_blank" rel="noreferrer">
-                    <Bot className="mr-2 h-4 w-4" /> View orchestrations
-                  </a>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-white">
+                  <Plus className="h-4 w-4" />
                 </Button>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {data.workflows.map((workflow) => (
-                  <div
-                    key={workflow.id}
-                    className="flex flex-col gap-4 rounded-lg border bg-card/60 p-4 sm:flex-row sm:items-center sm:justify-between"
+              </div>
+              
+              <div className="space-y-2">
+                {data?.watchlist.slice(0, 4).map((item, index) => (
+                  <motion.div
+                    key={item.symbol}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 + index * 0.05 }}
+                    className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
                   >
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground">{workflow.name}</p>
-                      <p className="text-xs text-muted-foreground">{workflow.owner}</p>
+                    <div>
+                      <div className="font-medium text-white">{item.symbol}</div>
+                      <div className="text-xs text-slate-500">{item.name}</div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-3 text-sm">
-                      <Badge className={statusBadgeVariant[workflow.status]}>{statusCopy[workflow.status]}</Badge>
-                      <span className="text-muted-foreground">Due {workflow.due}</span>
-                      <Button size="sm" variant="ghost" asChild>
-                        <a href={`https://lovable.dev/templates?filter=${workflow.type}`} target="_blank" rel="noreferrer">
-                          Manage flow
-                          <ArrowRight className="ml-1 h-4 w-4" />
-                        </a>
-                      </Button>
+                    <div className="text-right">
+                      <div className="font-medium text-white">${item.price}</div>
+                      <div className={`text-xs ${item.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {item.change >= 0 ? '+' : ''}{item.change}%
+                      </div>
                     </div>
+                  </motion.div>
+                ))}
+              </div>
+            </GlassCard>
+          </Reveal>
+
+          {/* Daily Brief - Medium Tile */}
+          <Reveal delay={0.4} className="lg:col-span-4">
+            <GlassCard data-agid="tile-brief">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-purple-400" />
+                  <h3 className="font-semibold text-white">{t('dashboard.dailyBrief')}</h3>
+                </div>
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                  <Clock className="h-3 w-3 mr-1" />
+                  {data?.brief.generated}
+                </Badge>
+              </div>
+              
+              <p className="text-sm text-slate-300 mb-4 leading-relaxed">
+                {data?.brief.summary}
+              </p>
+              
+              <div className="space-y-2">
+                <p className="text-xs text-slate-500 uppercase tracking-wide">Upcoming</p>
+                {data?.brief.events.map((event, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm text-slate-400">
+                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                    {event}
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </GlassCard>
+          </Reveal>
 
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Quick actions</CardTitle>
-                <CardDescription>One click to your most frequent operations.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {quickActions.map(({ label, description, href, icon: Icon }) => (
-                  <Button key={label} variant="outline" className="w-full justify-start gap-3" asChild>
-                    <a href={href} target="_blank" rel="noreferrer">
-                      <Icon className="h-4 w-4" />
-                      <span className="flex-1 text-left">
-                        <span className="block text-sm font-semibold text-foreground">{label}</span>
-                        <span className="block text-xs text-muted-foreground">{description}</span>
-                      </span>
-                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                    </a>
-                  </Button>
-                ))}
-              </CardContent>
-            </Card>
-          </section>
-
-          <section className="grid gap-6 2xl:grid-cols-[2fr_1.2fr]">
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Affiliate performance</CardTitle>
-                <CardDescription>
-                  Referrals and commissions with payout forecast for {data.affiliates.totals.payoutDate}.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 sm:grid-cols-3">
-                  <div className="rounded-lg border bg-card/60 p-4">
-                    <p className="text-xs text-muted-foreground">Total referrals</p>
-                    <p className="mt-2 text-2xl font-semibold">{data.affiliates.totals.referrals}</p>
-                  </div>
-                  <div className="rounded-lg border bg-card/60 p-4">
-                    <p className="text-xs text-muted-foreground">Projected payout</p>
-                    <p className="mt-2 text-2xl font-semibold">
-                      {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(
-                        data.affiliates.totals.earnings,
-                      )}
-                    </p>
-                  </div>
-                  <div className="rounded-lg border bg-card/60 p-4">
-                    <p className="text-xs text-muted-foreground">Next payment</p>
-                    <p className="mt-2 text-2xl font-semibold">{data.affiliates.totals.payoutDate}</p>
-                  </div>
+          {/* Notes - Wide Tile */}
+          <Reveal delay={0.5} className="lg:col-span-6">
+            <GlassCard data-agid="tile-notes">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <StickyNote className="h-5 w-5 text-amber-400" />
+                  <h3 className="font-semibold text-white">{t('dashboard.notes')}</h3>
                 </div>
-                <Table className="mt-6">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Partner</TableHead>
-                      <TableHead className="hidden sm:table-cell">Referrals</TableHead>
-                      <TableHead className="hidden sm:table-cell">Conversion</TableHead>
-                      <TableHead>Revenue</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.affiliates.leaderboard.map((entry) => (
-                      <TableRow key={entry.name}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Building2 className="h-4 w-4 text-muted-foreground" />
-                            <span>{entry.name}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell">{entry.referrals}</TableCell>
-                        <TableCell className="hidden sm:table-cell">{entry.conversion}%</TableCell>
-                        <TableCell>
-                          {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(
-                            entry.revenue,
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Portfolio & transfers</CardTitle>
-                <CardDescription>Real accounts managed across brokerage, FX, and crypto holdings.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <Tabs defaultValue="accounts" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="accounts">Accounts</TabsTrigger>
-                    <TabsTrigger value="currencies">Holdings</TabsTrigger>
-                    <TabsTrigger value="transfers">Transfers</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="accounts" className="space-y-3">
-                    {data.accounts.map((account) => (
-                      <div key={account.name} className="flex items-center justify-between rounded-lg border bg-card/60 p-4">
-                        <div>
-                          <p className="text-sm font-semibold text-foreground">{account.name}</p>
-                          <p className="text-xs text-muted-foreground">{account.type}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-foreground">
-                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(
-                              account.balance,
-                            )}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {account.delta > 0 ? '+' : ''}
-                            {account.delta}% this month
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </TabsContent>
-                  <TabsContent value="currencies" className="space-y-3">
-                    {data.currencies.map((currency) => (
-                      <div key={currency.code} className="rounded-lg border bg-card/60 p-4">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="font-semibold">{currency.code}</span>
-                          <span>{currency.allocation}% allocation</span>
-                        </div>
-                        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                          <span>Growth</span>
-                          <span>{currency.growth}%</span>
-                        </div>
-                        <Progress value={currency.growth} className="mt-2 h-2" />
-                      </div>
-                    ))}
-                  </TabsContent>
-                  <TabsContent value="transfers" className="space-y-3">
-                    {data.transfers.map((transfer) => (
-                      <div key={transfer.hash} className="rounded-lg border bg-card/60 p-4">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="font-semibold">{transfer.network}</span>
-                          <Badge className={transfer.status === 'confirmed' ? 'bg-emerald-500 text-white' : 'bg-amber-400 text-black'}>
-                            {transfer.status}
-                          </Badge>
-                        </div>
-                        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                          <span>Amount</span>
-                          <span>
-                            {transfer.network.includes('Bitcoin')
-                              ? `${transfer.amount} BTC`
-                              : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(
-                                  transfer.amount,
-                                )}
-                          </span>
-                        </div>
-                        <Button variant="ghost" size="sm" className="mt-3 gap-2" asChild>
-                          <a href={transfer.link} target="_blank" rel="noreferrer">
-                            Inspect transfer
-                            <ExternalLink className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    ))}
-                  </TabsContent>
-                </Tabs>
-                <div className="rounded-lg border bg-muted/40 p-4">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Billing status</p>
-                  <div className="mt-3 grid grid-cols-3 gap-3 text-center text-sm">
-                    <div>
-                      <p className="text-2xl font-semibold text-foreground">{data.invoices.paid}</p>
-                      <p className="text-xs text-muted-foreground">Paid</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-semibold text-foreground">{data.invoices.upcoming}</p>
-                      <p className="text-xs text-muted-foreground">Upcoming</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-semibold text-foreground">{data.invoices.overdue}</p>
-                      <p className="text-xs text-muted-foreground">Overdue</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-
-          <section className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Learning spotlight</CardTitle>
-                <CardDescription>Keep your Serbian finance community ahead with curated resources.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[260px]">
-                  <div className="space-y-4 pr-4">
-                    {data.learning.map((resource) => (
-                      <div key={resource.id} className="rounded-lg border bg-card/60 p-4">
-                        <div className="flex items-center gap-2 text-xs text-primary">
-                          <GraduationCap className="h-4 w-4" />
-                          <span className="uppercase tracking-wide">{resource.category}</span>
-                        </div>
-                        <h3 className="mt-2 text-base font-semibold text-foreground">{resource.title}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">{resource.summary}</p>
-                        <Button size="sm" variant="link" className="mt-2 px-0" asChild>
-                          <a href={resource.link} target="_blank" rel="noreferrer">
-                            Explore material
-                            <ExternalLink className="ml-1 h-4 w-4" />
-                          </a>
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Reference center</CardTitle>
-                <CardDescription>Trusted institutions, ready for legal review.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {referenceLinks.map((item) => (
-                  <Button key={item.label} variant="outline" className="w-full justify-between" asChild>
-                    <a href={item.href} target="_blank" rel="noreferrer">
-                      <span className="max-w-[80%] text-left text-sm font-medium text-foreground">{item.label}</span>
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  </Button>
-                ))}
-                <div className="rounded-lg border border-dashed border-primary/40 bg-primary/5 p-4 text-sm text-muted-foreground">
-                  <p className="font-medium text-foreground">Need a human? Schedule a compliance call.</p>
-                  <Button size="sm" className="mt-3 bg-primary text-primary-foreground shadow-glow" asChild>
-                    <a href="https://cal.com" target="_blank" rel="noreferrer">
-                      Book 30 min with Cheggie team
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-
-          {totals?.assets && totals?.affiliate && (
-            <Card className="border-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 shadow-inner">
-              <CardContent className="flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-sm uppercase tracking-wide text-muted-foreground">Strategic summary</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-foreground">
-                    Assets under guidance now at {formatValue(totals.assets.value, totals.assets.format)} with
-                    {` ${totals.assets.delta}%`} growth.
-                  </h2>
-                  <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                    Affiliate momentum adds {formatValue(totals.affiliate.value, totals.affiliate.format)} in the last month.
-                    Keep campaigns aligned with BMAD — Belief, Motivation, Ability, Data — to keep Serbian youth confident in
-                    international finance tools.
-                  </p>
-                </div>
-                <Button size="lg" className="bg-primary text-primary-foreground shadow-lg" asChild>
-                  <a href="https://stripe.com/issuing" target="_blank" rel="noreferrer">
-                    <TrendingUp className="mr-2 h-5 w-5" />
-                    Scale payouts securely
-                  </a>
+                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Note
                 </Button>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+              
+              <div className="space-y-3">
+                {data?.notes.map((note, index) => (
+                  <motion.div
+                    key={note.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 + index * 0.05 }}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-slate-500 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm text-white">{note.text}</p>
+                      <p className="text-xs text-slate-500 mt-1">{note.time}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </GlassCard>
+          </Reveal>
 
-          <footer className="pt-6 text-sm text-muted-foreground">
-            <p className="text-center">
-              Built for Cheggie AI on Lovable Cloud · Secure AI, Bitcoin, and FX automation ready for Serbia.
-            </p>
-          </footer>
-            </div>
-          )}
-        </>
-      )}
+          {/* Quick Actions - Wide Tile */}
+          <Reveal delay={0.6} className="lg:col-span-6">
+            <GlassCard data-agid="tile-actions">
+              <div className="flex items-center gap-2 mb-4">
+                <Zap className="h-5 w-5 text-teal-400" />
+                <h3 className="font-semibold text-white">{t('dashboard.quickActions')}</h3>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { icon: Rocket, label: 'Lovable', color: 'from-pink-500 to-rose-500', href: 'https://lovable.dev' },
+                  { icon: CreditCard, label: 'Stripe', color: 'from-indigo-500 to-purple-500', href: 'https://dashboard.stripe.com' },
+                  { icon: BrainCircuit, label: 'OpenRouter', color: 'from-emerald-500 to-teal-500', href: 'https://openrouter.ai' },
+                ].map((action, index) => (
+                  <motion.a
+                    key={action.label}
+                    href={action.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br ${action.color} text-white transition-shadow hover:shadow-lg`}
+                  >
+                    <action.icon className="h-6 w-6 mb-2" />
+                    <span className="text-sm font-medium">{action.label}</span>
+                    <ExternalLink className="h-3 w-3 mt-1 opacity-60" />
+                  </motion.a>
+                ))}
+              </div>
+            </GlassCard>
+          </Reveal>
+        </div>
+      </main>
     </div>
   );
 };
+
+// Loading skeleton
+const DashboardSkeleton = () => (
+  <div className="space-y-8">
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-32 bg-slate-800" />
+      <Skeleton className="h-10 w-64 bg-slate-800" />
+    </div>
+    <div className="grid gap-4 md:grid-cols-4">
+      {[...Array(4)].map((_, i) => (
+        <Skeleton key={i} className="h-32 rounded-2xl bg-slate-800" />
+      ))}
+    </div>
+    <div className="grid gap-6 lg:grid-cols-12">
+      <Skeleton className="lg:col-span-8 lg:row-span-2 h-96 rounded-2xl bg-slate-800" />
+      <Skeleton className="lg:col-span-4 h-44 rounded-2xl bg-slate-800" />
+      <Skeleton className="lg:col-span-4 h-44 rounded-2xl bg-slate-800" />
+      <Skeleton className="lg:col-span-6 h-44 rounded-2xl bg-slate-800" />
+      <Skeleton className="lg:col-span-6 h-44 rounded-2xl bg-slate-800" />
+    </div>
+  </div>
+);
 
 export default Dashboard;

@@ -1,42 +1,60 @@
 import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
+
+const navItems = [
+  { key: 'dashboard', href: '/dashboard', isRoute: true },
+  { key: 'tracking', href: '#tracking', isRoute: false },
+  { key: 'insights', href: '#insights', isRoute: false },
+  { key: 'about', href: '#about', isRoute: false },
+] as const;
 
 export const MobileNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const navItems = [
-    { label: t('nav.features'), href: '#features' },
-    { label: t('nav.pricing'), href: '#pricing' },
-    { label: t('nav.faq'), href: '#faq' },
-    { label: t('nav.about'), href: '#about' },
-  ];
-
-  const handleLinkClick = () => {
+  const handleNavClick = (item: typeof navItems[number]) => {
     setIsOpen(false);
+    
+    if (item.isRoute) {
+      navigate(item.href);
+      return;
+    }
+    
+    const sectionId = item.href.replace('#', '');
+    
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: sectionId } });
+    } else {
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
   };
 
   return (
-    <>
-      {/* Hamburger Menu Button */}
-      <button
+    <div className="md:hidden" data-agid="nav-mobile">
+      {/* Menu Toggle Button */}
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden relative z-50 inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+        className="text-white hover:bg-white/10"
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
-        aria-label="Toggle navigation menu"
       >
-        {isOpen ? (
-          <X className="h-6 w-6" aria-hidden="true" />
-        ) : (
-          <Menu className="h-6 w-6" aria-hidden="true" />
-        )}
-      </button>
+        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </Button>
 
-      {/* Mobile Menu Panel */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -45,55 +63,91 @@ export const MobileNav = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
-              className="md:hidden fixed inset-0 bg-black/50 z-40"
-              aria-hidden="true"
             />
-
-            {/* Menu Content */}
+            
+            {/* Menu Panel */}
             <motion.div
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="md:hidden fixed left-0 top-0 bottom-0 w-full sm:w-64 bg-background border-r border-border z-40 pt-20 px-4 overflow-y-auto"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 z-50 h-full w-80 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 p-6"
             >
-              <nav className="flex flex-col gap-3">
-                {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={handleLinkClick}
-                    className="block px-4 py-3 rounded-lg text-base font-medium text-foreground hover:bg-accent/10 hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-                  >
-                    {item.label}
-                  </a>
-                ))}
+              {/* Close Button */}
+              <div className="flex justify-end mb-8">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsOpen(false)}
+                  className="text-white hover:bg-white/10"
+                  aria-label="Close menu"
+                >
+                  <X className="h-6 w-6" />
+                </Button>
+              </div>
 
-                <div className="border-t border-border mt-4 pt-4 flex flex-col gap-2">
+              {/* Navigation Links */}
+              <nav className="space-y-2">
+                {navItems.map((item, index) => (
+                  <motion.div
+                    key={item.key}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <button
+                      onClick={() => handleNavClick(item)}
+                      className="w-full text-left px-4 py-3 text-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                    >
+                      {t(`nav.${item.key}`)}
+                    </button>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {/* Auth Buttons */}
+              <div className="mt-8 space-y-3">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
                   <Button
                     variant="outline"
-                    className="w-full justify-center h-12"
-                    asChild
+                    className="w-full h-12 border-white/20 text-white hover:bg-white/5"
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate('/auth');
+                    }}
                   >
-                    <Link to="/auth" onClick={handleLinkClick}>
-                      {t('nav.login')}
-                    </Link>
+                    {t('nav.login')}
                   </Button>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
                   <Button
-                    className="w-full justify-center h-12 bg-gradient-primary"
-                    asChild
+                    className="w-full h-12 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold"
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate('/auth');
+                    }}
                   >
-                    <Link to="/auth?mode=signup" onClick={handleLinkClick}>
-                      {t('nav.signup')}
-                    </Link>
+                    {t('nav.signup')}
                   </Button>
-                </div>
-              </nav>
+                </motion.div>
+              </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 };
+
+export default MobileNav;

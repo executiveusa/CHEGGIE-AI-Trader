@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detailed Saved Analysis View</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111822",
+                        "card-dark": "#161e29",
+                        "border-dark": "#233348",
+                        "text-muted": "#92a9c9",
+                        "accent-teal": "#0bda5e",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    letterSpacing: {
+                        "widest": "0.15em",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111822; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #233348; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #324867; 
+        }
+        
+        .glass-panel {
+            background: rgba(17, 24, 34, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Chart animation */
+        .chart-path {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: dash 2s ease-out forwards;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* Fade in up animation */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+<div class="relative flex min-h-screen w-full flex-col group/design-root">
+<!-- Header -->
+<header class="sticky top-0 z-50 glass-panel border-b border-border-dark px-6 py-3 transition-all duration-300">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<!-- Logo -->
+<div class="flex items-center gap-3 text-white cursor-pointer group">
+<div class="size-8 flex items-center justify-center rounded-lg bg-primary/20 group-hover:bg-primary/40 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">query_stats</span>
+</div>
+<h2 class="text-white text-lg font-bold tracking-tight">FinAnalysis</h2>
+</div>
+<!-- Navigation & Toggles -->
+<div class="flex items-center gap-6">
+<!-- Nav Links (Desktop) -->
+<nav class="hidden md:flex items-center gap-6 mr-4">
+<a class="text-text-muted hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-white text-sm font-medium border-b-2 border-primary pb-0.5 transition-colors" href="#">Saved Analysis</a>
+<a class="text-text-muted hover:text-white text-sm font-medium transition-colors" href="#">Market News</a>
+</nav>
+<!-- Language Toggle -->
+<div class="hidden sm:flex items-center bg-card-dark rounded-lg p-1 border border-border-dark">
+<button class="px-2 py-1 rounded text-xs font-bold text-white bg-primary/20 hover:bg-primary/30 transition-colors">EN</button>
+<button class="px-2 py-1 rounded text-xs font-bold text-text-muted hover:text-white transition-colors">ES-MX 🇲🇽</button>
+<button class="px-2 py-1 rounded text-xs font-bold text-text-muted hover:text-white transition-colors">SR</button>
+</div>
+<div class="w-px h-6 bg-border-dark hidden sm:block"></div>
+<!-- Action Icons -->
+<div class="flex gap-2">
+<button aria-label="Toggle Theme" class="flex items-center justify-center size-9 rounded-lg bg-card-dark border border-border-dark text-text-muted hover:text-white hover:border-primary/50 transition-all">
+<span class="material-symbols-outlined" style="font-size: 20px;">light_mode</span>
+</button>
+<button aria-label="Profile" class="flex items-center justify-center size-9 rounded-lg bg-card-dark border border-border-dark text-text-muted hover:text-white hover:border-primary/50 transition-all">
+<img class="size-6 rounded-full opacity-80 hover:opacity-100" data-alt="User profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiTuTaB1dFUS0iSYwN_NFpc6MUN2IPC629vx_GACGci9c2stunpkZX4hqh0vWNJzV12lpIGs8i-C8DRd5Y-nNmX61L1BEKblKlbQXadrgdU9JY6VbE_ylK2ZWPiIrN5SmlJa1f7OlAciUw238tPiksfFA2ujEqX5CRBJLSMFsi2tu3NiCIXJciyrYbTXJBxbyiMlpBZCsFUyCOvhwr1YlDO8_OYxGajFyFfG9RPsRDXfyhF8SOzkVF_TkV-je7pM60Iyc1Uh_u99A"/>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full flex justify-center pb-24">
+<div class="w-full max-w-[1024px] px-4 md:px-6 flex flex-col gap-8 py-8">
+<!-- Page Heading Section -->
+<section class="flex flex-col gap-6 fade-in-up">
+<div class="flex flex-wrap justify-between items-start gap-4">
+<div class="flex flex-col gap-2 max-w-2xl">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest text-accent-teal bg-accent-teal/10 border border-accent-teal/20">HEALTHY</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest text-text-muted bg-border-dark/30 border border-border-dark">PRIVATE</span>
+</div>
+<h1 class="text-white text-3xl md:text-5xl font-display font-light leading-tight tracking-tight">Q3 Portfolio Performance Analysis</h1>
+<p class="text-text-muted text-sm md:text-base font-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                Created: Oct 12, 2023 
+                                <span class="text-border-dark">•</span> 
+                                Last Updated: Just now
+                            </p>
+</div>
+<!-- High Level Action -->
+<div class="hidden md:flex">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-lg text-sm font-semibold transition-all">
+<span class="material-symbols-outlined text-[18px]">edit_document</span>
+                                Edit Parameters
+                            </button>
+</div>
+</div>
+</section>
+<!-- Key Metrics Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-in-up delay-100">
+<!-- Metric 1 -->
+<div class="group flex flex-col gap-3 rounded-xl p-6 bg-card-dark border border-border-dark hover:border-primary/40 transition-all hover:shadow-[0_0_20px_rgba(19,109,236,0.1)]">
+<div class="flex items-center justify-between">
+<p class="text-text-muted text-xs font-bold tracking-widest uppercase">Net Growth</p>
+<span class="material-symbols-outlined text-primary text-[20px]">show_chart</span>
+</div>
+<div class="flex items-end gap-3">
+<p class="text-white text-3xl font-display font-light tracking-tight tabular-nums">+12.4%</p>
+<div class="flex items-center text-accent-teal text-sm font-medium mb-1">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                2.1%
+                            </div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="group flex flex-col gap-3 rounded-xl p-6 bg-card-dark border border-border-dark hover:border-primary/40 transition-all hover:shadow-[0_0_20px_rgba(19,109,236,0.1)]">
+<div class="flex items-center justify-between">
+<p class="text-text-muted text-xs font-bold tracking-widest uppercase">Volatility</p>
+<span class="material-symbols-outlined text-text-muted text-[20px]">waves</span>
+</div>
+<div class="flex items-end gap-3">
+<p class="text-white text-3xl font-display font-light tracking-tight">Low</p>
+<div class="flex items-center text-text-muted text-sm font-medium mb-1">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+                                Stable
+                            </div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="group flex flex-col gap-3 rounded-xl p-6 bg-card-dark border border-border-dark hover:border-primary/40 transition-all hover:shadow-[0_0_20px_rgba(19,109,236,0.1)]">
+<div class="flex items-center justify-between">
+<p class="text-text-muted text-xs font-bold tracking-widest uppercase">Sharpe Ratio</p>
+<span class="material-symbols-outlined text-text-muted text-[20px]">balance</span>
+</div>
+<div class="flex items-end gap-3">
+<p class="text-white text-3xl font-display font-light tracking-tight tabular-nums">1.8</p>
+<div class="flex items-center text-accent-teal text-sm font-medium mb-1">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                0.1%
+                            </div>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="group flex flex-col gap-3 rounded-xl p-6 bg-card-dark border border-border-dark hover:border-primary/40 transition-all hover:shadow-[0_0_20px_rgba(19,109,236,0.1)]">
+<div class="flex items-center justify-between">
+<p class="text-text-muted text-xs font-bold tracking-widest uppercase">Dividends</p>
+<span class="material-symbols-outlined text-text-muted text-[20px]">payments</span>
+</div>
+<div class="flex items-end gap-3">
+<p class="text-white text-3xl font-display font-light tracking-tight tabular-nums">$450</p>
+<div class="flex items-center text-accent-teal text-sm font-medium mb-1">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                5.0%
+                            </div>
+</div>
+</div>
+</section>
+<!-- Chart Section -->
+<section class="flex flex-col gap-4 p-6 md:p-8 rounded-xl bg-card-dark border border-border-dark fade-in-up delay-200">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div>
+<p class="text-text-muted text-sm font-medium mb-1">Asset Growth vs S&amp;P 500</p>
+<p class="text-white text-4xl font-light tracking-tight tabular-nums">$124,500.00</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-xs font-bold text-text-muted hover:text-white rounded bg-border-dark/30 hover:bg-border-dark transition-colors">1M</button>
+<button class="px-3 py-1 text-xs font-bold text-text-muted hover:text-white rounded bg-border-dark/30 hover:bg-border-dark transition-colors">3M</button>
+<button class="px-3 py-1 text-xs font-bold text-white rounded bg-primary transition-colors">1Y</button>
+<button class="px-3 py-1 text-xs font-bold text-text-muted hover:text-white rounded bg-border-dark/30 hover:bg-border-dark transition-colors">ALL</button>
+</div>
+</div>
+<div class="relative w-full h-[300px] mt-4">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 300">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#136dec" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#136dec" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="#233348" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="1000" y1="225" y2="225"></line>
+<line stroke="#233348" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="1000" y1="150" y2="150"></line>
+<line stroke="#233348" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="1000" y1="75" y2="75"></line>
+<!-- Area Fill -->
+<path d="M0,220 C100,210 200,180 300,190 C400,200 500,120 600,140 C700,160 800,80 900,60 L1000,40 L1000,300 L0,300 Z" fill="url(#chartGradient)"></path>
+<!-- Line Path -->
+<path class="chart-path" d="M0,220 C100,210 200,180 300,190 C400,200 500,120 600,140 C700,160 800,80 900,60 L1000,40" fill="none" stroke="#136dec" stroke-linecap="round" stroke-width="3"></path>
+<!-- S&P 500 Benchmark (Muted) -->
+<path d="M0,240 C100,230 200,220 300,230 C400,240 500,180 600,200 C700,210 800,150 900,140 L1000,130" fill="none" stroke="#233348" stroke-dasharray="4 4" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<!-- Tooltip Mockup -->
+<div class="absolute top-[30px] left-[88%] transform -translate-x-1/2 bg-card-dark border border-border-dark shadow-xl rounded-lg p-3 min-w-[120px]">
+<p class="text-xs text-text-muted mb-1">Oct 12, 2023</p>
+<p class="text-sm font-bold text-white">$124,500.00</p>
+<p class="text-xs text-accent-teal">+1.2%</p>
+</div>
+<div class="absolute top-[40px] left-[90%] w-3 h-3 bg-primary rounded-full border-2 border-[#111822] shadow-lg transform -translate-x-1/2"></div>
+</div>
+<div class="flex justify-between text-xs text-text-muted mt-2 px-2 font-mono uppercase tracking-wide">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+</div>
+</section>
+<!-- Two Column Layout: Narrative & News -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 fade-in-up delay-300">
+<!-- Left Column: Editorial & Notes (2/3) -->
+<div class="lg:col-span-2 flex flex-col gap-8">
+<!-- Editorial Insight -->
+<div class="flex flex-col gap-6">
+<h3 class="text-2xl font-display font-light text-white tracking-tight border-b border-border-dark pb-4">Editorial Insight</h3>
+<div class="prose prose-invert prose-p:text-gray-300 prose-p:font-light prose-p:leading-relaxed max-w-none">
+<p class="text-lg leading-relaxed text-gray-200">
+                                    Despite significant market volatility in the tech sector, the portfolio remained resilient due to heavy weighting in defensive consumer staples. The correlation with the broader market has decreased, suggesting effective diversification strategies are in place.
+                                </p>
+<p>
+                                    Looking ahead to Q4, the increased allocation in emerging markets is expected to offset potential stagnation in domestic large-cap growth. However, monitor the currency risk associated with the unhedged Eurozone positions.
+                                </p>
+</div>
+</div>
+<!-- User Notes -->
+<div class="bg-card-dark border border-dashed border-border-dark rounded-xl p-6 relative group">
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-border-dark rounded-lg text-text-muted hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<h4 class="text-sm font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">sticky_note_2</span>
+                                Personal Notes
+                            </h4>
+<p class="text-gray-300 font-handwriting italic opacity-90">
+                                "Remember to review the expense ratios for the ETF holdings before the end of the year. Rebalance trigger set at 5% drift."
+                            </p>
+</div>
+</div>
+<!-- Right Column: News & Feed (1/3) -->
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-border-dark pb-4">
+<h3 class="text-lg font-display font-medium text-white tracking-tight">Relevant News</h3>
+<button class="text-xs text-primary font-bold hover:underline">VIEW ALL</button>
+</div>
+<div class="flex flex-col gap-4">
+<!-- News Item 1 -->
+<a class="group flex gap-4 p-3 -mx-3 rounded-lg hover:bg-card-dark transition-colors" href="#">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0 bg-border-dark relative">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Stock market graph on a screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhwQ4uAhTvAY9zSPv_zANEf-2cfB0fRILA9lXyY0wCtaqBtvCWvR6p12SN-16_zCSl--YN3BGopViyw17aOQMZdcNBBnROSsAH3lgG9aJj21YMohafan8OZ3SsEZYFmVELaIsqG4ZP1dIOb8d__uwH96PJrudkaShU39D83nBeLmZwYaOKLEeRod0PP7soHi-oHfgI4AT9BTJjmz2LMpQzIO2wyfdjyJWNXxTpzf_ZjyJnQ72_izl7jGMqaMbJaMAqCsRUVCjKIZE"/>
+</div>
+<div class="flex flex-col justify-center">
+<h5 class="text-sm font-medium text-white leading-snug group-hover:text-primary transition-colors">Fed signals rate cuts may come sooner than expected</h5>
+<p class="text-xs text-text-muted mt-1">Wall Street Journal • 2h ago</p>
+</div>
+</a>
+<!-- News Item 2 -->
+<a class="group flex gap-4 p-3 -mx-3 rounded-lg hover:bg-card-dark transition-colors" href="#">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0 bg-border-dark relative">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Analysis charts on a tablet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPiiUYXDJTF7xr67vFliGtOonkjxpkpNR3_sZsbUqaYDBqdYvtYh8Wb6FHHEgWr5jRhVsomSyubfnaG_271IlU9mPHOG7D5CUlNE2no7p1tkjy2uZx4Lu4OrzZ5RPoSgX9yl9hYt000exotS8cEpAY9hPG9Vi8Cy_AVC4IMxTq0Jcbz-7ApxuNQN2Ab72-s1loP7r1WmlhrMqNGF4aVut6OJ5dBHMXtNl0qFPIPTCrJVwGLIpNeCxTKhLDZdYsWMxJCoKaVkkOKb0"/>
+</div>
+<div class="flex flex-col justify-center">
+<h5 class="text-sm font-medium text-white leading-snug group-hover:text-primary transition-colors">Tech sector volatility index hits 6-month low</h5>
+<p class="text-xs text-text-muted mt-1">Bloomberg • 5h ago</p>
+</div>
+</a>
+<!-- News Item 3 -->
+<a class="group flex gap-4 p-3 -mx-3 rounded-lg hover:bg-card-dark transition-colors" href="#">
+<div class="w-16 h-16 rounded overflow-hidden flex-shrink-0 bg-border-dark relative">
+<img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Cryptocurrency coins" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpyFo5ZhmnS-IXVbWLO0yHWiUI9auWb_aMf4ForI8gAhXbHbpi3T_Yfea6PWBytS8u9km4fA5X0GylG6BKSSmzTKUyHShigwe5fs6yQWhCdil4xIY6slUR6yi-73LAPksj-ZI4qRj3RGbESpinJ8xLqt_7_Jjlg6VYhAW_CNcMJ-yY5Ttdlrxv__6ZG1aa1ajRfFf-tBatTd2b9o33FMvffRyBIb5DQgOMhi8J_h6vXS0nldn6u0xxr_2Y-0ffzfAsqaqzJL4J9eQ"/>
+</div>
+<div class="flex flex-col justify-center">
+<h5 class="text-sm font-medium text-white leading-snug group-hover:text-primary transition-colors">Crypto correlation with equities decouples</h5>
+<p class="text-xs text-text-muted mt-1">CoinDesk • 8h ago</p>
+</div>
+</a>
+</div>
+<!-- AI Suggestion -->
+<div class="mt-4 p-4 rounded-lg bg-primary/10 border border-primary/20">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span class="text-xs font-bold tracking-widest uppercase">AI Insight</span>
+</div>
+<p class="text-sm text-gray-300 leading-relaxed">Based on this news, consider hedging your tech positions if the yield curve inverts further.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Action Footer -->
+<div class="fixed bottom-0 left-0 w-full z-40 bg-[#111822]/90 backdrop-blur-md border-t border-border-dark py-4">
+<div class="max-w-[1024px] mx-auto px-6 flex justify-between items-center">
+<div class="hidden sm:flex text-sm text-text-muted">
+                    Last autosaved at 14:02 PM
+                </div>
+<div class="flex gap-3 w-full sm:w-auto justify-end">
+<button class="flex-1 sm:flex-none h-10 px-4 rounded-lg bg-card-dark border border-border-dark hover:bg-border-dark text-white text-sm font-medium transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                        Share
+                    </button>
+<button class="flex-1 sm:flex-none h-10 px-4 rounded-lg bg-card-dark border border-border-dark hover:bg-border-dark text-white text-sm font-medium transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                        Export
+                    </button>
+<button class="flex-1 sm:flex-none h-10 px-6 rounded-lg bg-primary hover:bg-blue-600 text-white text-sm font-bold tracking-wide transition-colors flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(19,109,236,0.3)]">
+                        Update Analysis
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -2,12 +2,13 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
-  sr: {
+  // LATIN SERBIAN (sr-Latn) - Primary language
+  'sr-Latn': {
     translation: {
       nav: {
         features: 'Mogućnosti',
         pricing: 'Cene',
-        about: 'O nama',
+        about: 'O meni',
         contact: 'Kontakt',
         login: 'Prijava',
         signup: 'Registruj se',
@@ -16,23 +17,28 @@ const resources = {
         workflow: 'Tok rada',
         integrations: 'Integracije',
         faq: 'Česta pitanja',
+        tracking: 'Praćenje',
+        insights: 'Uvidi',
       },
       hero: {
-        title: 'AI-Pokrenuta Analiza Akcija i Poslovanja',
-        subtitle: 'Brže, jeftinije i preciznije od Wall Street analitičara',
-        cta: 'Započnite besplatno',
-        learnMore: 'Saznajte više',
-        watchDemo: 'Pogledajte demo',
-        callSales: 'Pozovite prodaju',
-        callSalesAria: 'Pozovite tim za prodaju',
+        badge: 'Finansije + Životni stil',
+        title: 'Dizajniraj bogatstvo. Živi slobodno.',
+        subtitle: 'Harmonizujem lične rituale, tokove kapitala i globalne prilike kako bi svaka odluka vodila ka slobodi.',
+        cta: 'Započni put',
+        secondary: 'Istraži okvir',
+        learnMore: 'Saznaj više',
+        watchDemo: 'Pogledaj demo',
+        callSales: 'Pozovi prodaju',
+        callSalesAria: 'Pozovi tim za prodaju',
       },
       languageSelection: {
-        title: 'Izaberite vaš jezik',
-        subtitle: 'Počnite vašu finansijsku analizu',
+        title: 'Izaberi svoj jezik',
+        subtitle: 'Započni svoje finansijsko putovanje',
         continue: 'Nastavi',
       },
       features: {
-        title: 'Moćne AI mogućnosti',
+        title: 'Šta pratim sada',
+        subtitle: 'Javni pregled mojih trenutnih fokusa',
         deepResearch: {
           title: 'Dubinsko istraživanje',
           description: 'AI-pokrenuta analiza u realnom vremenu',
@@ -50,155 +56,85 @@ const resources = {
           description: 'Dostupno na više jezika',
         },
       },
+      tracking: {
+        title: 'Šta pratim sada',
+        subtitle: 'Trenutni fokus i aktivni signali',
+        marketPulse: 'Tržišni puls',
+        watchlist: 'Lista praćenja',
+        dailyBrief: 'Dnevni pregled',
+        portfolioDelta: 'Delta portfolija',
+        signals: 'aktivnih signala',
+        assets: 'praćenih sredstava',
+        ready: 'Spremno',
+        thisWeek: 'ove nedelje',
+        viewDashboard: 'Pogledaj kompletnu tablu',
+        updated: 'Ažurirano',
+        live: 'Uživo',
+      },
+      insights: {
+        title: 'Izabrani uvidi i projekti',
+        subtitle: 'Moj rad na preseku finansija, tehnologije i životnog stila',
+        readMore: 'Pročitaj više',
+        viewProject: 'Pogledaj projekat',
+      },
+      about: {
+        title: 'O meni',
+        subtitle: 'Finansijska inteligencija i dizajn životnog stila',
+        bio: 'Gradim sisteme koji harmonizuju lične rituale, tokove kapitala i globalne prilike. Moja misija je pomoći ti da dizajniraš bogatstvo i živiš slobodno.',
+        languages: 'Jezici',
+        location: 'Lokacija',
+        focus: 'Trenutni fokus',
+        schedule: 'Zakaži poziv',
+      },
       faq: {
         title: 'Često postavljana pitanja',
-        subtitle: 'Pronađite odgovore na česta pitanja',
+        subtitle: 'Pronađi odgovore na česta pitanja',
         items: [
           {
             question: 'Šta je AI analiza akcija?',
-            answer: 'Naša AI analiza koristi napredne algoritme za procenu akcija, vesti i tržišnih trendova kako bi pružila precizne uvide za pametno investiranje.',
+            answer: 'Moja AI analiza koristi napredne algoritme za procenu akcija, vesti i tržišnih trendova kako bi pružila precizne uvide za pametno investiranje.',
           },
           {
-            question: 'Koliko košta servis?',
-            answer: 'Nudimo različite planove od besplatnog do enterprise nivoa. Pogledajte našu sekciju cena za više detalja.',
+            question: 'Kako mogu pristupiti tabli?',
+            answer: 'Registruj se za besplatan nalog da dobiješ pristup potpunoj kontrolnoj tabli sa tržišnim signalima u realnom vremenu.',
           },
           {
-            question: 'Da li mogu da promenim jezik?',
-            answer: 'Da, naša platforma podržava srpski, engleski i španski jezik. Jezik možete promeniti u bilo kojem trenutku.',
-          },
-        ],
-      },
-      testimonials: {
-        title: 'Šta naši korisnici kažu',
-        subtitle: 'Pridružite se hiljadama zadovoljnih investitora',
-        items: [
-          {
-            quote: 'Ova platforma je promenila moj pristup investiranju. AI analize su neverovatno precizne.',
-            author: 'Marko Petrović',
-            role: 'Investitor',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
-          },
-          {
-            quote: 'Najbolji alat za brzu i pouzdanu analizu. Preporučujem svim svojim klijentima.',
-            author: 'Ana Jovanović',
-            role: 'Finansijski savetnik',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
-          },
-          {
-            quote: 'Koristim za analizu tržišta i planiranje poslovanja. Jednostavno odličan servis.',
-            author: 'Stefan Nikolić',
-            role: 'Preduzetnik',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
+            question: 'Da li mogu promeniti jezik?',
+            answer: 'Da, platforma podržava srpski (latinica), engleski i španski. Jezik možeš promeniti u bilo kojem trenutku.',
           },
         ],
       },
-      dashboardShowcase: {
-        badge: 'Pregled platforme',
-        title: 'Tržišna inteligencija u realnom vremenu',
-        description: 'Dobijte trenutan pristup sveobuhvatnoj analizi akcija sa veštačkom inteligencijom koja proučava hiljade izvora podataka.',
-        imageAlt: 'Pregled kontrolne table',
-        metrics: [
-          { label: 'Aktivni korisnici', value: '10K+' },
-          { label: 'Analize danas', value: '2.5K' },
-          { label: 'Stopa uspeha', value: '99.9%' }
-        ],
-        highlights: [
-          { badge: 'AI', title: 'Pametna analiza', description: 'Pokreće GPT-5' },
-          { badge: 'BRZO', title: 'Podaci u realnom vremenu', description: 'Ažuriranja ispod sekunde' },
-          { badge: 'SIGURNO', title: 'Bankarska sigurnost', description: '256-bitna enkripcija' }
-        ]
+      cta: {
+        title: 'Spreman da dizajniraš svoje bogatstvo?',
+        subtitle: 'Pristupi kontrolnoj tabli i započni svoje putovanje',
+        primary: 'Počni besplatno',
+        secondary: 'Saznaj više',
       },
-      workflow: {
-        title: 'Kako funkcioniše',
-        subtitle: 'Tri jednostavna koraka do pametnijeg investiranja',
-        cta: 'Počnite sa analizom sada',
-        steps: [
-          {
-            title: 'Unesite vaš upit',
-            description: 'Pitajte o bilo kojoj akciji, sektoru ili poslovnoj ideji',
-            caption: 'AI na prirodnom jeziku razume kontekst'
-          },
-          {
-            title: 'AI dubinsko istraživanje',
-            description: 'Multi-agentni sistem analizira hiljade podataka',
-            caption: 'Vesti u realnom vremenu, dokumenti, sentiment, tehnička analiza'
-          },
-          {
-            title: 'Dobijte izveštaj za akciju',
-            description: 'Preuzmite PDF ili interaktivnu kontrolnu tablu',
-            caption: 'Rezime, KPI, analiza rizika, prognoze'
-          }
-        ]
+      dashboard: {
+        welcome: 'Dobrodošao',
+        title: 'Komandni centar',
+        marketPulse: 'Tržišni puls',
+        watchlist: 'Lista praćenja',
+        dailyBrief: 'Dnevni pregled',
+        notes: 'Beleške',
+        quickActions: 'Brze akcije',
       },
-      integrations: {
-        badge: 'Tehnološki stek',
-        title: 'Pokreće industrijske lidere',
-        subtitle: 'Alati na nivou preduzeća za pouzdanu analizu',
-        stack: [
-          {
-            name: 'OpenAI GPT-5',
-            description: 'Napredno rezovanje i razumevanje prirodnog jezika'
-          },
-          {
-            name: 'Tržišni podaci u realnom vremenu',
-            description: 'Fidovi uživo sa glavnih berzi širom sveta'
-          },
-          {
-            name: 'Oblačna infrastruktura',
-            description: '99.9% vreme rada sa automatskim skaliranjem'
-          }
-        ]
-      },
-      ctaSection: {
-        title: 'Spremni za pametnija investiranja?',
-        subtitle: 'Pridružite se hiljadama investitora koji koriste AI analizu',
-        primary: 'Počnite besplatnu probu',
-        secondary: 'Saznajte više'
-      },
-      pricing: {
-        title: 'Jednostavne, transparentne cene',
-        subtitle: 'Izaberite plan koji odgovara vašim potrebama',
-        monthly: 'Mesečno',
-        yearly: 'Godišnje',
-        free: 'Besplatno',
-        pro: 'Pro',
-        enterprise: 'Preduzeće',
-        freePlan: {
-          price: '$0',
-          period: '/mesec',
-          features: [
-            '5 analiza mesečno',
-            'Osnovni izveštaji',
-            'Podrška e-poštom',
-            'Standardni uvidi',
-          ],
-          cta: 'Počnite',
-        },
-        proPlan: {
-          price: '$29',
-          period: '/mesec',
-          features: [
-            '100 analiza mesečno',
-            'Napredni izveštaji',
-            'Prioritetna podrška',
-            'AI dubinsko istraživanje',
-            'Izvoz izveštaja',
-          ],
-          cta: 'Počnite',
-          popular: 'Najpopularnije',
-        },
-        enterprisePlan: {
-          price: 'Prilagođeno',
-          period: '',
-          features: [
-            'Neograničene analize',
-            'Posvećena podrška',
-            'Prilagođeni modeli',
-            'API pristup',
-            'Afilirat program',
-          ],
-          cta: 'Kontaktirajte nas',
-        },
+      footer: {
+        tagline: 'Tvoj životni stil, pokrenut finansijskom inteligencijom',
+        contact: 'Imaš pitanja? Javi se',
+        phoneCta: '📞 Pozovi me',
+        phoneCtaAria: 'Pozovi za konsultacije',
+        product: 'Navigacija',
+        resources: 'Resursi',
+        docs: 'Dokumentacija',
+        status: 'Status sistema',
+        api: 'API referenca',
+        legal: 'Pravno',
+        privacy: 'Politika privatnosti',
+        terms: 'Uslovi korišćenja',
+        security: 'Bezbednost',
+        copyright: '© 2024 Cheggie. Sva prava zadržana.',
+        statusLink: 'Status',
       },
       common: {
         loading: 'Učitavanje...',
@@ -211,6 +147,8 @@ const resources = {
       },
     },
   },
+  
+  // ENGLISH
   en: {
     translation: {
       nav: {
@@ -225,11 +163,15 @@ const resources = {
         workflow: 'Workflow',
         integrations: 'Integrations',
         faq: 'FAQ',
+        tracking: 'Tracking',
+        insights: 'Insights',
       },
       hero: {
-        title: 'AI-Powered Stock & Business Analysis',
-        subtitle: 'Faster, cheaper, and more accurate than Wall Street analysts',
-        cta: 'Start Free',
+        badge: 'Finance + Lifestyle',
+        title: 'Design Wealth. Live Free.',
+        subtitle: 'I harmonize personal rituals, capital flows, and global opportunities so every decision compounds toward freedom.',
+        cta: 'Start My Journey',
+        secondary: 'Explore the Framework',
         learnMore: 'Learn More',
         watchDemo: 'Watch Demo',
         callSales: 'Call Sales',
@@ -237,11 +179,12 @@ const resources = {
       },
       languageSelection: {
         title: 'Choose Your Language',
-        subtitle: 'Start your financial analysis journey',
+        subtitle: 'Start your financial journey',
         continue: 'Continue',
       },
       features: {
         title: 'Powerful AI Capabilities',
+        subtitle: 'Advanced tools for smarter investing',
         deepResearch: {
           title: 'Deep Research',
           description: 'AI-powered real-time analysis',
@@ -259,155 +202,85 @@ const resources = {
           description: 'Available in multiple languages',
         },
       },
+      tracking: {
+        title: "What I'm Tracking Now",
+        subtitle: 'Current focus and active signals',
+        marketPulse: 'Market Pulse',
+        watchlist: 'Watchlist',
+        dailyBrief: 'Daily Brief',
+        portfolioDelta: 'Portfolio Delta',
+        signals: 'active signals',
+        assets: 'assets tracked',
+        ready: 'Ready',
+        thisWeek: 'this week',
+        viewDashboard: 'View Full Dashboard',
+        updated: 'Updated',
+        live: 'Live',
+      },
+      insights: {
+        title: 'Selected Insights & Projects',
+        subtitle: 'My work at the intersection of finance, technology, and lifestyle',
+        readMore: 'Read More',
+        viewProject: 'View Project',
+      },
+      about: {
+        title: 'About Me',
+        subtitle: 'Financial Intelligence & Lifestyle Design',
+        bio: 'I build systems that harmonize personal rituals, capital flows, and global opportunities. My mission is to help you design wealth and live free.',
+        languages: 'Languages',
+        location: 'Location',
+        focus: 'Current Focus',
+        schedule: 'Schedule a Call',
+      },
       faq: {
         title: 'Frequently Asked Questions',
         subtitle: 'Find answers to common questions',
         items: [
           {
             question: 'What is AI stock analysis?',
-            answer: 'Our AI analysis uses advanced algorithms to evaluate stocks, news, and market trends to provide accurate insights for smart investing.',
+            answer: 'My AI analysis uses advanced algorithms to evaluate stocks, news, and market trends to provide accurate insights for smart investing.',
           },
           {
-            question: 'How much does the service cost?',
-            answer: 'We offer various plans from free to enterprise level. Check our pricing section for more details.',
+            question: 'How can I access the dashboard?',
+            answer: 'Sign up for a free account to get access to the full dashboard with real-time market signals.',
           },
           {
             question: 'Can I change the language?',
-            answer: 'Yes, our platform supports Serbian, English, and Spanish. You can change the language at any time.',
+            answer: 'Yes, the platform supports Serbian (Latin), English, and Spanish. You can change the language at any time.',
           },
         ],
       },
-      testimonials: {
-        title: 'What Our Users Say',
-        subtitle: 'Join thousands of satisfied investors',
-        items: [
-          {
-            quote: 'This platform has transformed my approach to investing. The AI analysis is incredibly accurate.',
-            author: 'John Smith',
-            role: 'Investor',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
-          },
-          {
-            quote: 'The best tool for quick and reliable analysis. I recommend it to all my clients.',
-            author: 'Sarah Johnson',
-            role: 'Financial Advisor',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
-          },
-          {
-            quote: 'I use it for market analysis and business planning. Simply excellent service.',
-            author: 'Michael Brown',
-            role: 'Entrepreneur',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
-          },
-        ],
+      cta: {
+        title: 'Ready to Design Your Wealth?',
+        subtitle: 'Access the full dashboard and start your journey',
+        primary: 'Get Started Free',
+        secondary: 'Learn More',
       },
-      dashboardShowcase: {
-        badge: 'Platform Overview',
-        title: 'Real-Time Market Intelligence',
-        description: 'Get instant access to comprehensive stock analysis powered by AI that studies thousands of data sources.',
-        imageAlt: 'Dashboard preview',
-        metrics: [
-          { label: 'Active Users', value: '10K+' },
-          { label: 'Analyses Today', value: '2.5K' },
-          { label: 'Success Rate', value: '99.9%' }
-        ],
-        highlights: [
-          { badge: 'AI', title: 'Smart Analysis', description: 'Powered by GPT-5' },
-          { badge: 'FAST', title: 'Real-time Data', description: 'Sub-second updates' },
-          { badge: 'SECURE', title: 'Bank-grade Security', description: '256-bit encryption' }
-        ]
+      dashboard: {
+        welcome: 'Welcome',
+        title: 'Command Center',
+        marketPulse: 'Market Pulse',
+        watchlist: 'Watchlist',
+        dailyBrief: 'Daily Brief',
+        notes: 'Notes',
+        quickActions: 'Quick Actions',
       },
-      workflow: {
-        title: 'How It Works',
-        subtitle: 'Three simple steps to smarter investing',
-        cta: 'Start Analyzing Now',
-        steps: [
-          {
-            title: 'Enter Your Query',
-            description: 'Ask about any stock, sector, or business idea',
-            caption: 'Natural language AI understands context'
-          },
-          {
-            title: 'AI Deep Research',
-            description: 'Multi-agent system analyzes thousands of data points',
-            caption: 'Real-time news, filings, sentiment, technicals'
-          },
-          {
-            title: 'Get Actionable Report',
-            description: 'Download PDF or interactive dashboard',
-            caption: 'Executive summary, KPIs, risk analysis, forecasts'
-          }
-        ]
-      },
-      integrations: {
-        badge: 'Technology Stack',
-        title: 'Powered by Industry Leaders',
-        subtitle: 'Enterprise-grade tools for reliable analysis',
-        stack: [
-          {
-            name: 'OpenAI GPT-5',
-            description: 'Advanced reasoning and natural language understanding'
-          },
-          {
-            name: 'Real-Time Market Data',
-            description: 'Live feeds from major exchanges worldwide'
-          },
-          {
-            name: 'Cloud Infrastructure',
-            description: '99.9% uptime with automatic scaling'
-          }
-        ]
-      },
-      ctaSection: {
-        title: 'Ready to Make Smarter Investments?',
-        subtitle: 'Join thousands of investors using AI-powered analysis',
-        primary: 'Start Free Trial',
-        secondary: 'Learn More'
-      },
-      pricing: {
-        title: 'Simple, Transparent Pricing',
-        subtitle: 'Choose the plan that fits your needs',
-        monthly: 'Monthly',
-        yearly: 'Yearly',
-        free: 'Free',
-        pro: 'Pro',
-        enterprise: 'Enterprise',
-        freePlan: {
-          price: '$0',
-          period: '/month',
-          features: [
-            '5 analyses per month',
-            'Basic reports',
-            'Email support',
-            'Standard insights',
-          ],
-          cta: 'Get Started',
-        },
-        proPlan: {
-          price: '$29',
-          period: '/month',
-          features: [
-            '100 analyses per month',
-            'Advanced reports',
-            'Priority support',
-            'AI deep research',
-            'Export reports',
-          ],
-          cta: 'Get Started',
-          popular: 'Most Popular',
-        },
-        enterprisePlan: {
-          price: 'Custom',
-          period: '',
-          features: [
-            'Unlimited analyses',
-            'Dedicated support',
-            'Custom models',
-            'API access',
-            'Affiliate program',
-          ],
-          cta: 'Contact Us',
-        },
+      footer: {
+        tagline: 'Your lifestyle, powered by financial intelligence',
+        contact: 'Questions? Reach out',
+        phoneCta: '📞 Call me',
+        phoneCtaAria: 'Call for consultation',
+        product: 'Navigation',
+        resources: 'Resources',
+        docs: 'Documentation',
+        status: 'System Status',
+        api: 'API Reference',
+        legal: 'Legal',
+        privacy: 'Privacy Policy',
+        terms: 'Terms of Service',
+        security: 'Security',
+        copyright: '© 2024 Cheggie. All rights reserved.',
+        statusLink: 'Status',
       },
       common: {
         loading: 'Loading...',
@@ -420,12 +293,14 @@ const resources = {
       },
     },
   },
-  es: {
+  
+  // MEXICAN SPANISH (es-MX)
+  'es-MX': {
     translation: {
       nav: {
         features: 'Características',
         pricing: 'Precios',
-        about: 'Acerca de',
+        about: 'Sobre mí',
         contact: 'Contacto',
         login: 'Iniciar sesión',
         signup: 'Registrarse',
@@ -434,11 +309,15 @@ const resources = {
         workflow: 'Flujo de trabajo',
         integrations: 'Integraciones',
         faq: 'Preguntas frecuentes',
+        tracking: 'Seguimiento',
+        insights: 'Perspectivas',
       },
       hero: {
-        title: 'Análisis de Acciones y Negocios con IA',
-        subtitle: 'Más rápido, más barato y más preciso que los analistas de Wall Street',
-        cta: 'Comenzar gratis',
+        badge: 'Finanzas + Estilo de vida',
+        title: 'Diseña riqueza. Vive libre.',
+        subtitle: 'Armonizo rituales personales, flujos de capital y oportunidades globales para que cada decisión te acerque a la libertad.',
+        cta: 'Inicia mi viaje',
+        secondary: 'Explora el marco',
         learnMore: 'Saber más',
         watchDemo: 'Ver demostración',
         callSales: 'Llamar a ventas',
@@ -446,11 +325,12 @@ const resources = {
       },
       languageSelection: {
         title: 'Elige tu idioma',
-        subtitle: 'Comienza tu viaje de análisis financiero',
+        subtitle: 'Comienza tu viaje financiero',
         continue: 'Continuar',
       },
       features: {
         title: 'Potentes Capacidades de IA',
+        subtitle: 'Herramientas avanzadas para invertir más inteligentemente',
         deepResearch: {
           title: 'Investigación Profunda',
           description: 'Análisis en tiempo real con IA',
@@ -468,155 +348,85 @@ const resources = {
           description: 'Disponible en varios idiomas',
         },
       },
+      tracking: {
+        title: 'Lo que estoy siguiendo ahora',
+        subtitle: 'Enfoque actual y señales activas',
+        marketPulse: 'Pulso del mercado',
+        watchlist: 'Lista de seguimiento',
+        dailyBrief: 'Resumen diario',
+        portfolioDelta: 'Delta del portafolio',
+        signals: 'señales activas',
+        assets: 'activos rastreados',
+        ready: 'Listo',
+        thisWeek: 'esta semana',
+        viewDashboard: 'Ver panel completo',
+        updated: 'Actualizado',
+        live: 'En vivo',
+      },
+      insights: {
+        title: 'Perspectivas y proyectos seleccionados',
+        subtitle: 'Mi trabajo en la intersección de finanzas, tecnología y estilo de vida',
+        readMore: 'Leer más',
+        viewProject: 'Ver proyecto',
+      },
+      about: {
+        title: 'Sobre mí',
+        subtitle: 'Inteligencia financiera y diseño de estilo de vida',
+        bio: 'Construyo sistemas que armonizan rituales personales, flujos de capital y oportunidades globales. Mi misión es ayudarte a diseñar riqueza y vivir libre.',
+        languages: 'Idiomas',
+        location: 'Ubicación',
+        focus: 'Enfoque actual',
+        schedule: 'Agendar una llamada',
+      },
       faq: {
         title: 'Preguntas Frecuentes',
         subtitle: 'Encuentra respuestas a preguntas comunes',
         items: [
           {
             question: '¿Qué es el análisis de acciones con IA?',
-            answer: 'Nuestro análisis de IA utiliza algoritmos avanzados para evaluar acciones, noticias y tendencias del mercado para proporcionar información precisa para inversiones inteligentes.',
+            answer: 'Mi análisis de IA utiliza algoritmos avanzados para evaluar acciones, noticias y tendencias del mercado para proporcionar información precisa para inversiones inteligentes.',
           },
           {
-            question: '¿Cuánto cuesta el servicio?',
-            answer: 'Ofrecemos varios planes desde gratis hasta nivel empresarial. Consulta nuestra sección de precios para más detalles.',
+            question: '¿Cómo puedo acceder al panel?',
+            answer: 'Regístrate para obtener una cuenta gratuita y accede al panel completo con señales de mercado en tiempo real.',
           },
           {
             question: '¿Puedo cambiar el idioma?',
-            answer: 'Sí, nuestra plataforma admite serbio, inglés y español. Puedes cambiar el idioma en cualquier momento.',
+            answer: 'Sí, la plataforma admite serbio (latino), inglés y español. Puedes cambiar el idioma en cualquier momento.',
           },
         ],
       },
-      testimonials: {
-        title: 'Lo Que Dicen Nuestros Usuarios',
-        subtitle: 'Únete a miles de inversores satisfechos',
-        items: [
-          {
-            quote: 'Esta plataforma ha transformado mi enfoque de inversión. El análisis de IA es increíblemente preciso.',
-            author: 'Carlos García',
-            role: 'Inversor',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
-          },
-          {
-            quote: 'La mejor herramienta para análisis rápidos y confiables. Lo recomiendo a todos mis clientes.',
-            author: 'María López',
-            role: 'Asesora Financiera',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
-          },
-          {
-            quote: 'Lo uso para análisis de mercado y planificación empresarial. Simplemente un servicio excelente.',
-            author: 'Antonio Martínez',
-            role: 'Empresario',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
-          },
-        ],
+      cta: {
+        title: '¿Listo para diseñar tu riqueza?',
+        subtitle: 'Accede al panel completo y comienza tu viaje',
+        primary: 'Comienza gratis',
+        secondary: 'Saber más',
       },
-      dashboardShowcase: {
-        badge: 'Resumen de la plataforma',
-        title: 'Inteligencia de mercado en tiempo real',
-        description: 'Obtenga acceso instantáneo a análisis completo de acciones impulsado por IA que estudia miles de fuentes de datos.',
-        imageAlt: 'Vista previa del panel',
-        metrics: [
-          { label: 'Usuarios activos', value: '10K+' },
-          { label: 'Análisis hoy', value: '2.5K' },
-          { label: 'Tasa de éxito', value: '99.9%' }
-        ],
-        highlights: [
-          { badge: 'IA', title: 'Análisis inteligente', description: 'Impulsado por GPT-5' },
-          { badge: 'RÁPIDO', title: 'Datos en tiempo real', description: 'Actualizaciones en menos de un segundo' },
-          { badge: 'SEGURO', title: 'Seguridad bancaria', description: 'Cifrado de 256 bits' }
-        ]
+      dashboard: {
+        welcome: 'Bienvenido',
+        title: 'Centro de comando',
+        marketPulse: 'Pulso del mercado',
+        watchlist: 'Lista de seguimiento',
+        dailyBrief: 'Resumen diario',
+        notes: 'Notas',
+        quickActions: 'Acciones rápidas',
       },
-      workflow: {
-        title: 'Cómo funciona',
-        subtitle: 'Tres simples pasos para invertir de forma más inteligente',
-        cta: 'Comenzar a analizar ahora',
-        steps: [
-          {
-            title: 'Ingrese su consulta',
-            description: 'Pregunte sobre cualquier acción, sector o idea de negocio',
-            caption: 'IA en lenguaje natural entiende el contexto'
-          },
-          {
-            title: 'Investigación profunda de IA',
-            description: 'Sistema multi-agente analiza miles de puntos de datos',
-            caption: 'Noticias en tiempo real, presentaciones, sentimiento, análisis técnico'
-          },
-          {
-            title: 'Obtenga informe accionable',
-            description: 'Descargue PDF o panel interactivo',
-            caption: 'Resumen ejecutivo, KPI, análisis de riesgo, pronósticos'
-          }
-        ]
-      },
-      integrations: {
-        badge: 'Stack tecnológico',
-        title: 'Impulsado por líderes de la industria',
-        subtitle: 'Herramientas de nivel empresarial para análisis confiables',
-        stack: [
-          {
-            name: 'OpenAI GPT-5',
-            description: 'Razonamiento avanzado y comprensión del lenguaje natural'
-          },
-          {
-            name: 'Datos de mercado en tiempo real',
-            description: 'Fuentes en vivo de las principales bolsas de todo el mundo'
-          },
-          {
-            name: 'Infraestructura en la nube',
-            description: '99.9% de tiempo de actividad con escalado automático'
-          }
-        ]
-      },
-      ctaSection: {
-        title: '¿Listo para hacer inversiones más inteligentes?',
-        subtitle: 'Únete a miles de inversores que usan análisis impulsado por IA',
-        primary: 'Comenzar prueba gratuita',
-        secondary: 'Saber más'
-      },
-      pricing: {
-        title: 'Precios Simples y Transparentes',
-        subtitle: 'Elige el plan que se adapte a tus necesidades',
-        monthly: 'Mensual',
-        yearly: 'Anual',
-        free: 'Gratis',
-        pro: 'Pro',
-        enterprise: 'Empresa',
-        freePlan: {
-          price: '$0',
-          period: '/mes',
-          features: [
-            '5 análisis por mes',
-            'Informes básicos',
-            'Soporte por correo',
-            'Información estándar',
-          ],
-          cta: 'Comenzar',
-        },
-        proPlan: {
-          price: '$29',
-          period: '/mes',
-          features: [
-            '100 análisis por mes',
-            'Informes avanzados',
-            'Soporte prioritario',
-            'Investigación profunda con IA',
-            'Exportar informes',
-          ],
-          cta: 'Comenzar',
-          popular: 'Más Popular',
-        },
-        enterprisePlan: {
-          price: 'Personalizado',
-          period: '',
-          features: [
-            'Análisis ilimitados',
-            'Soporte dedicado',
-            'Modelos personalizados',
-            'Acceso a API',
-            'Programa de afiliados',
-          ],
-          cta: 'Contáctanos',
-        },
+      footer: {
+        tagline: 'Tu estilo de vida, impulsado por inteligencia financiera',
+        contact: '¿Preguntas? Contáctame',
+        phoneCta: '📞 Llámame',
+        phoneCtaAria: 'Llamar para consulta',
+        product: 'Navegación',
+        resources: 'Recursos',
+        docs: 'Documentación',
+        status: 'Estado del sistema',
+        api: 'Referencia API',
+        legal: 'Legal',
+        privacy: 'Política de privacidad',
+        terms: 'Términos de servicio',
+        security: 'Seguridad',
+        copyright: '© 2024 Cheggie. Todos los derechos reservados.',
+        statusLink: 'Estado',
       },
       common: {
         loading: 'Cargando...',
@@ -635,8 +445,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: localStorage.getItem('selectedLanguage') || 'sr',
-    fallbackLng: 'sr',
+    lng: localStorage.getItem('selectedLanguage') || 'en',
+    fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },

@@ -1,9 +1,9 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -27,11 +27,20 @@ const AdminFallback = () => (
   </div>
 );
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const hasSelectedLanguage = localStorage.getItem('languageSelected');
-
-  if (!hasSelectedLanguage) {
-    return <Navigate to="/" replace />;
+// Protected route for dashboard - requires auth or demo session
+const DashboardProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAdminAuth();
+  
+  // Also check localStorage for demo session
+  const storedSession = localStorage.getItem('cheggie-admin-session-v1');
+  const hasSession = !!user || !!storedSession;
+  
+  if (loading) {
+    return <AdminFallback />;
+  }
+  
+  if (!hasSession) {
+    return <Navigate to="/auth" replace />;
   }
 
   return <>{children}</>;
@@ -45,22 +54,58 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// First-run language modal wrapper
+const FirstRunLanguageCheck = ({ children }: { children: React.ReactNode }) => {
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const location = useLocation();
+  
+  useEffect(() => {
+    const hasSelectedLanguage = localStorage.getItem('languageSelected');
+    // Only show modal on home page if language not selected
+    if (!hasSelectedLanguage && location.pathname === '/') {
+      setShowLanguageModal(true);
+    }
+  }, [location.pathname]);
+
+  // If on language page or modal is dismissed, render children
+  if (location.pathname === '/language') {
+    return <>{children}</>;
+  }
+
+  return (
+    <>
+      {children}
+      {showLanguageModal && (
+        <Navigate to="/language" state={{ returnTo: location.pathname }} replace />
+      )}
+    </>
+  );
+};
+
 const queryClient = new QueryClient();
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<LanguageSelection />} />
-    <Route
-      path="/home"
-      element={
-        <ProtectedRoute>
-          <Index />
-        </ProtectedRoute>
-      }
-    />
+    {/* PUBLIC ROUTES - / is now HOME */}
+    <Route path="/" element={<Index />} />
+    <Route path="/language" element={<LanguageSelection />} />
     <Route path="/auth" element={<Auth />} />
-    <Route path="/dashboard" element={<Dashboard />} />
+    
+    {/* Legacy redirect from /home to / */}
+    <Route path="/home" element={<Navigate to="/" replace />} />
+    
+    {/* PROTECTED ROUTES */}
+    <Route 
+      path="/dashboard" 
+      element={
+        <DashboardProtectedRoute>
+          <Dashboard />
+        </DashboardProtectedRoute>
+      } 
+    />
     <Route path="/agents" element={<AgentsConsole />} />
+    
+    {/* ADMIN ROUTES */}
     <Route
       path="/admin"
       element={
