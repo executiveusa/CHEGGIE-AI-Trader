@@ -19,6 +19,7 @@ const resources = {
         faq: 'Česta pitanja',
         tracking: 'Praćenje',
         insights: 'Uvidi',
+        trading: 'AI Trgovanje',
       },
       hero: {
         badge: 'Finansije + Životni stil',
@@ -165,6 +166,7 @@ const resources = {
         faq: 'FAQ',
         tracking: 'Tracking',
         insights: 'Insights',
+        trading: 'AI Trading',
       },
       hero: {
         badge: 'Finance + Lifestyle',
@@ -311,6 +313,7 @@ const resources = {
         faq: 'Preguntas frecuentes',
         tracking: 'Seguimiento',
         insights: 'Perspectivas',
+        trading: 'Trading IA',
       },
       hero: {
         badge: 'Finanzas + Estilo de vida',

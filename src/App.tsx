@@ -20,6 +20,7 @@ const AdminComputerUse = lazy(() => import('./routes/admin/computer-use'));
 const AdminAgents = lazy(() => import('./routes/admin/agents'));
 const AdminReviews = lazy(() => import('./routes/admin/reviews'));
 const AdminLogs = lazy(() => import('./routes/admin/logs'));
+const TradingDashboard = lazy(() => import('./pages/TradingDashboard'));
 
 const AdminFallback = () => (
   <div className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
@@ -101,6 +102,14 @@ const AppRoutes = () => (
         <DashboardProtectedRoute>
           <Dashboard />
         </DashboardProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/dashboard/trading" 
+      element={
+        <Suspense fallback={<AdminFallback />}>
+          <TradingDashboard />
+        </Suspense>
       } 
     />
     <Route path="/agents" element={<AgentsConsole />} />

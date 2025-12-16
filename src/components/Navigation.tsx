@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 
 const navItems = [
   { key: 'dashboard', href: '/dashboard', isRoute: true },
+  { key: 'trading', href: '/dashboard/trading', isRoute: true },
   { key: 'tracking', href: '#tracking', isRoute: false },
   { key: 'insights', href: '#insights', isRoute: false },
   { key: 'about', href: '#about', isRoute: false },
