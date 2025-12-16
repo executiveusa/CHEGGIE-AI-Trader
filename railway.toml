@@ -1,13 +1,7 @@
-# Railway.toml - Cheggie AI Trader Frontend Deployment
-# Uses Nixpacks for static site serving
-
+# Railway Configuration - Nixpacks Builder
 [build]
 builder = "NIXPACKS"
 
 [deploy]
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
-
-# Environment Variables
-[env]
-NODE_ENV = "production"
+restartPolicyMaxRetries = 5
