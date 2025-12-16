@@ -1,66 +1,25 @@
-# Railway.toml - Zero-Secrets Deployment Configuration with Cost Protection
-# This configuration ensures minimal resource usage and free-tier compliance
+# Railway.toml - Cheggie AI Trader Frontend Deployment
+# Uses Dockerfile for nginx static serving
 
 [build]
-builder = "NIXPACKS"
-buildCommand = "pip install -r requirements.txt"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "python main.py configs/default_config.json"
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
+restartPolicyMaxRetries = 10
 
-# Cost Protection: Enforce minimal resource limits
+# Tell Railway which port the container exposes
+[deploy.internal]
+port = 80
+
+# Health check
 [deploy.healthcheck]
-enabled = false  # Disable healthcheck to save resources
+path = "/"
+interval = "30s"
+timeout = "5s"
 
-# Resource Limits - Minimal configuration for free tier
-[deploy.resources]
-# Enforce low-tier resource allocation
-# These limits help prevent runaway costs
-memory = "512Mi"  # Minimum memory allocation
-cpu = "0.5"       # Half a CPU core
-
-# Environment Variables - All secrets optional
+# Environment Variables
 [env]
-RUNTIME_ENV_PATH = "./.runtime_env.json"
-MATH_HTTP_PORT = "8000"
-SEARCH_HTTP_PORT = "8001"
-TRADE_HTTP_PORT = "8002"
-GETPRICE_HTTP_PORT = "8003"
-AGENT_MAX_STEP = "30"
-INIT_DATE = "2025-10-01"
-END_DATE = "2025-10-21"
-
-# Optional secrets (commented out - set in Railway dashboard if needed)
-# OPENAI_API_KEY = ""
-# OPENAI_API_BASE = ""
-# ALPHAADVANTAGE_API_KEY = ""
-# JINA_API_KEY = ""
-
-# Cost Protection Settings
-RAILWAY_COST_PROTECTION_ENABLED = "true"
-RAILWAY_FREE_TIER_LIMIT_MB = "512"
-RAILWAY_AUTO_SHUTDOWN_ENABLED = "true"
-
-# Monitoring markers for usage tracking
-# Future agents can query these endpoints
-[monitoring]
-enabled = false  # Disabled to save resources
-usage_check_interval = "3600"  # Check every hour (in seconds)
-free_tier_ceiling_mb = "512"
-auto_shutdown_on_breach = true
-
-# Deployment metadata
-[metadata]
-deployment_mode = "zero_secrets"
-app_type = "python_trading_bot"
-cost_tier = "free"
-auto_scaling_disabled = true
-
-# Notes for deployment
-# 1. No secrets required for initial deployment
-# 2. Application uses local cached data
-# 3. AI models will use stubbed responses in demo mode
-# 4. Set optional secrets in Railway dashboard for full functionality
-# 5. Monitor usage to stay within free tier limits
+NODE_ENV = "production"
+VITE_ALPHA_VANTAGE_API_KEY = ""  # Optional - for live forex data
